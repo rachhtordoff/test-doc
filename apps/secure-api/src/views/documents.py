@@ -49,7 +49,7 @@ def new_document(user_id):
 def search_documents(user_id):
 #Connect to S3
     conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
-    bucketName =  str(user_id) + "12345"
+    bucketName =  (user_id)
     print(bucketName)
     bucket = conn.get_bucket(bucketName, validate=False)
     bucket_list = bucket.list()
@@ -75,7 +75,7 @@ def get_buckets():
 def get_document(bucket_id, doc_name):
     #call method to make the actual search
     conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
-    bucketName =  str(bucket_id) + "12345"
+    bucketName =  str(bucket_id)
     bucket = conn.get_bucket(bucketName, validate=False)
 
     key = bucket.get_key(doc_name)

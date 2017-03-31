@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-5">
+
+      {% for doc in documents['data'] %}
+      <li>
+<a href="/download-document/{{doc}}/{{bucket_name}}"> {{doc}} </a>
+</li>
+{% endfor %}
+</form>
+    </div>
+
+
+  </div>
+
+</div>
+
+<script>
+function myFunction() {
+    var x = document.getElementById("myFile");
+    x.disabled = true;
+}
+</script>
+</form>
+
+{% endblock %}
