@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="POST" action="/account-setup">
+  <ul class="list-group" style="margin-left:5px;">
+    <li class="list-group-item">
+
+    </br>
+    <div class="row">
+      <div class="col-sm-1">
+        Firstname:
+      </div>
+      <div class="col-sm-2">
+        <input type="text" name="firstname" value="{{account_details['forname']}}">
+      </div>
+      <div class="col-sm-1">
+        Lastname:
+      </div>
+      <div class="col-sm-2">
+        <input type="text" name="surname" value="{{account_details['surname']}}">
+      </div>
+    </div>
+  </br>
+    <div class="row">
+      <div class="col-sm-2">
+        Date of birth (Example: 10/01/2017):
+      </div>
+      <div class="col-sm-2">
+        <input type="text" name="date_of_birth" value="{{account_details['date_of_birth']}}">
+      </div>
+      <div class="col-sm-1">
+        Gender:
+      </div>
+      <div class="col-sm-2">
+        <input type="text" name="gender" value="{{account_details['gender']}}">
+      </div>
+    </div>
+  </li>
+</br>
+
+<input type="submit" value="Submit">
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-5">
+
+      {% for docs in documents['data'] %}
+      <li>
+
+<a href="/download-document/{{docs}}"> {{docs}} </a>
+</li>
+{% endfor %}
+</form>
+    </div>
+
+    <div class="col-sm-7">
+      <form method="POST" action="/documents" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <p>Upload document</p>
+      <button class="btn" onclick="myFunction()">Try</button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function myFunction() {
+    var x = document.getElementById("myFile");
+    x.disabled = true;
+}
+</script>
+</form>
+
+{% endblock %}
