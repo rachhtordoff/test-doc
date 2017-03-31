@@ -1,0 +1,50 @@
+#app docker containers
+client_frontend:
+  build: /vagrant/apps/client-frontend
+  ports:
+    - "5101:8000"
+  volumes:
+    - /vagrant/apps/client-frontend:/opt
+  links:
+    - secure_api
+admin_frontend:
+  build: /vagrant/apps/admin-frontend
+  ports:
+    - "5001:8000"
+  volumes:
+    - /vagrant/apps/admin-frontend:/opt
+  links:
+    - secure_api
+secure_api:
+  build: /vagrant/apps/secure-api
+  ports:
+    - "5100:8000"
+  volumes:
+    - /vagrant/apps/secure-api:/opt
+  links:
+    - postgres
+
+insecure_frontend:
+  build: /vagrant/apps/insecure-frontend
+  ports:
+    - "5110:8000"
+  volumes:
+    - /vagrant/apps/insecure-frontend:/opt
+  links:
+    - postgres
+
+
+#commodities docker containers
+postgres:
+  build: /vagrant/commodities/postgres
+  ports:
+    - "5432:5432"
+
+proxy:
+  build: /vagrant/commodities/proxy
+  ports:
+    - "80:80"
+  volumes:
+    - /vagrant/commodities/proxy/sites-enabled:/etc/nginx/sites-enabled
+  links:
+    - client_frontend
