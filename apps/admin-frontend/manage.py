@@ -3,7 +3,7 @@ from src.main import app
 import subprocess
 import os
 # Using Alembic?
-# See what extra lines are needed here:
+# See what uniproject lines are needed here:
 # http://192.168.249.38/gadgets/gadget-api/blob/master/manage.py
 
 manager = Manager(app)
