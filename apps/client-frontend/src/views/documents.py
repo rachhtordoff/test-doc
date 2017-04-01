@@ -53,7 +53,7 @@ def download_document(doc_name):
         documents = get_document(bucket_id, doc_name)
         wrapper = """<html>
         <head>
-        <h1>%s</h1>
+        <h1>%s </h1>
         </head>
         <body><p>URL: <a href=\"%s\">%s</a></p></body>
         </html>"""
