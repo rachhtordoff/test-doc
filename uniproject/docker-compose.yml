@@ -36,15 +36,15 @@ insecure_frontend:
 
 #commodities docker containers
 postgres:
-  build: /vagrant/commodities/postgres
+  build: /vagrant/commodities/postgres-folder
   ports:
     - "5432:5432"
 
 proxy:
-  build: /vagrant/commodities/proxy
+  build: /vagrant/commodities/proxy-folder
   ports:
     - "80:80"
   volumes:
-    - /vagrant/commodities/proxy/sites-enabled:/etc/nginx/sites-enabled
+    - /vagrant/commodities/proxy-folder/sites-enabled:/etc/nginx/sites-enabled
   links:
     - client_frontend
