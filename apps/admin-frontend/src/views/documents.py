@@ -23,6 +23,9 @@ def documents_main():
         pagetitle= "Client Buckets"
         user_buckets = get_all_user_buckets()
         print(user_buckets)
+    #    for id in user_buckets['data'][0]:
+    #        print(id[:-4])
+
         return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=user_buckets)
 
 @documents.route("/bucket/<bucket_name>",  methods=['GET'])
