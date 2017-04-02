@@ -6,28 +6,24 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-5">
-
-
       <table class="table">
         <thead>
           <tr>
+            <th>Document name</th>
             <th>&nbsp;</th>
-            <th>Client name</th>
-            <th>bucket</th>
+            <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>
-                {% for bucket_name in user_buckets['data'] %}
+          {% for doc in documents['data'] %}
           <tr>
-            <td></td>
-            <td>client name here</td>
-            <td><a href="/bucket/{{bucket_name}}"> bucket </a></td>
-
+            <td>{{doc}}</td>
+            <td><a href="/download-document/{{doc}}/{{bucket_name}}">Download Link</a></td>
+            <td><a href="/delete-document/{{doc}}/{{bucket_name}}">Delete</a></td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
-
 </form>
     </div>
 

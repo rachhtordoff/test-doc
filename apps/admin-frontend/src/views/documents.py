@@ -23,6 +23,9 @@ def documents_main():
         pagetitle= "Client Buckets"
         user_buckets = get_all_user_buckets()
         print(user_buckets)
+    #    for id in user_buckets['data'][0]:
+    #        print(id[:-4])
+
         return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=user_buckets)
 
 @documents.route("/bucket/<bucket_name>",  methods=['GET'])
@@ -34,7 +37,7 @@ def get_buckets(bucket_name):
         bucket_id = (int(bucket_name))
         documents = get_documents(bucket_id)
         pagetitle= "%s's documents" % bucket_name
-        return render_template('pages/user_documents.html', pagetitle=pagetitle, documents=documents)
+        return render_template('pages/user_documents.html', pagetitle=pagetitle, documents=documents, bucket_name=bucket_id)
 
 
 @documents.route("/documents",  methods=['POST'])
@@ -52,14 +55,12 @@ def documents_upload():
       else:
         return "not a valid file type"
 
-@documents.route("/download-document/<doc_name>",  methods=['GET'])
-def download_document(doc_name):
+@documents.route("/download-document/<doc_name>/<bucket_name>",  methods=['GET'])
+def download_document(doc_name, bucket_name):
     if 'user_id' not in session:
         return 'session ended'
     else:
-        id=session['user_id']
-        bucket_id = (int(id))
-        documents = get_document(bucket_id, doc_name)
+        documents = get_document(bucket_name, doc_name)
         wrapper = """<html>
         <head>
         <h1>%s</h1>

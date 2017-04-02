@@ -24,7 +24,7 @@ def documents_main():
         username= user_account['data'][0]['forname']
         pagetitle= "%s's documents" % username
         user="sally"
-        bucket_id = (int(id))
+        bucket_id = (str(id)+ "12345")
         documents = get_documents(bucket_id)
         return render_template('pages/documents.html', pagetitle=pagetitle, user=user, user_account= user_account, documents=documents)
 
@@ -49,11 +49,11 @@ def download_document(doc_name):
         return 'session ended'
     else:
         id=session['user_id']
-        bucket_id = (int(id))
+        bucket_id = (str(id)+ "12345")
         documents = get_document(bucket_id, doc_name)
         wrapper = """<html>
         <head>
-        <h1>%s</h1>
+        <h1>%s </h1>
         </head>
         <body><p>URL: <a href=\"%s\">%s</a></p></body>
         </html>"""
