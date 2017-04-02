@@ -6,12 +6,24 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-5">
-
-      {% for doc in documents['data'] %}
-      <li>
-<a href="/download-document/{{doc}}/{{bucket_name}}"> {{doc}} </a>
-</li>
-{% endfor %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Document name</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for doc in documents['data'] %}
+          <tr>
+            <td>{{doc}}</td>
+            <td><a href="/download-document/{{doc}}/{{bucket_name}}">Download Link</a></td>
+            <td><a href="/delete-document/{{doc}}/{{bucket_name}}">Delete</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 </form>
     </div>
 

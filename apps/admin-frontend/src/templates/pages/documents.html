@@ -7,12 +7,27 @@
   <div class="row">
     <div class="col-sm-5">
 
-      {% for bucket_name in user_buckets['data'] %}
-      <li>
 
-<a href="/bucket/{{bucket_name}}"> {{bucket_name}} </a>
-</li>
-{% endfor %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Client name</th>
+            <th>bucket</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for bucket_name in user_buckets['data'] %}
+          <tr>
+            <td></td>
+            <td>client name here</td>
+            <td><a href="/bucket/{{bucket_name}}"> bucket </a></td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
 </form>
     </div>
 
