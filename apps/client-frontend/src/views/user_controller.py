@@ -24,6 +24,7 @@ def new_user_account(params):
 def create_user_bucket(id):
     user_id=str(id)
     response = requests.request("POST", config.SECURE_API_URL + '/create_bucket/'+ user_id)
+    print(response)
     return response
 
 def get_user_setup(username, password):
