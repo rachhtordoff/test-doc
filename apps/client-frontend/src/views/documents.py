@@ -24,7 +24,7 @@ def documents_main():
         username= user_account['data'][0]['forname']
         pagetitle= "%s's documents" % username
         user="sally"
-        bucket_id = (str(id)+ "12345")
+        bucket_id =user_account['data'][0]['bucket_id']
         documents = get_documents(bucket_id)
         return render_template('pages/documents.html', pagetitle=pagetitle, user=user, user_account= user_account, documents=documents)
 
@@ -32,11 +32,13 @@ def documents_main():
 def documents_upload():
    if request.method == 'POST':
       file = request.files['file']
-      user_id= session['user_id']
+      user_id = session['user_id']
+      user_account = get_user_account_with_id(user_id)
+      bucket_id= user_account['data'][0]['bucket_id']
       if file and allowed_file(file.filename):
         file_content = file.read()
         file_name = file.filename
-        docs = post_document(user_id, file_content, file_name)
+        docs = post_document(bucket_id, file_content, file_name)
         if docs == 200:
             return redirect('/documents')
         else:"failed to upload"
@@ -48,8 +50,9 @@ def download_document(doc_name):
     if 'user_id' not in session:
         return 'session ended'
     else:
-        id=session['user_id']
-        bucket_id = (str(id)+ "12345")
+        user_id = session['user_id']
+        user_account = get_user_account_with_id(user_id)
+        bucket_id= user_account['data'][0]['bucket_id']
         documents = get_document(bucket_id, doc_name)
         wrapper = """<html>
         <head>
