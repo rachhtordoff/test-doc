@@ -9,10 +9,11 @@ from src import config
 from boto.exception import S3CreateError
 
 
-
 keyId =config.aws_access_key_id
 sKeyId= config.aws_secret_access_key
-
+boto.config.add_section('s3')
+boto.config.set('s3', 'use-sigv4', 'True')
+boto.config.set('s3', 'host', 's3.eu-west-2.amazonaws.com')
 # This is the blueprint object that gets registered into the app in blueprints.py.
 documents = Blueprint('documents', __name__)
 
@@ -20,21 +21,21 @@ documents = Blueprint('documents', __name__)
 def new_bucket(user_id):
     bucketName=str(user_id) + "12345"
     try:
-        conn = boto.connect_s3(keyId,sKeyId)
+        conn = boto.connect_s3(keyId,sKeyId, host='s3.eu-west-2.amazonaws.com')
         send = conn.create_bucket(bucketName, headers=None, location='eu-west-2', policy=None)
     except Exception as e:
-                print ("Unexpected error: %s" % e)
-                return "Unexpected error: %s" % e
+        print(e)
+        return e
     else:
         bucket={}
         bucket['bucket_name']= bucketName
         bucket['user_id']= user_id
-        results = Sql.new_bucket(bucket)
+        Sql.new_bucket(bucket)
         output= {}
         output['data'] = []
-        for result in results:
-            output['data'].append(result.name)
-    return jsonify(output)
+        output['data'].append(bucketName)
+        output['data'].append(user_id)
+        return jsonify(output)
 
 #TODO
 @documents.route("/post_document/<user_id>", methods=['POST'])
@@ -43,8 +44,6 @@ def new_document(user_id):
     data = request.files.to_dict()
     print(data)
     bucketName=str(user_id)
-    keyId =config.aws_access_key_id
-    sKeyId= config.aws_secret_access_key
     conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
     bucket = conn.get_bucket(bucketName)
 

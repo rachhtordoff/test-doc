@@ -65,6 +65,7 @@ class Sql:
         try_bucket = bucket(**params)
         Sql.session.add(try_bucket)
         Sql.session.commit()
+        print(Sql.get_bucket(try_bucket.to_dict()))
         return Sql.get_bucket(try_bucket.to_dict())
 
 #start of update sql statments
