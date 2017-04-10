@@ -9,23 +9,33 @@ from src import config
 from boto.exception import S3CreateError
 
 
-
 keyId =config.aws_access_key_id
 sKeyId= config.aws_secret_access_key
-
+boto.config.add_section('s3')
+boto.config.set('s3', 'use-sigv4', 'True')
+boto.config.set('s3', 'host', 's3.eu-west-2.amazonaws.com')
 # This is the blueprint object that gets registered into the app in blueprints.py.
 documents = Blueprint('documents', __name__)
 
 @documents.route("/create_bucket/<user_id>", methods=['POST'])
 def new_bucket(user_id):
-#Connect to S3 with access credentials
-    keyId =config.aws_access_key_id
-    sKeyId= config.aws_secret_access_key
     bucketName=str(user_id) + "12345"
-    print(bucketName)
-    conn = boto.connect_s3(keyId,sKeyId)
-    conn.create_bucket(bucketName, headers=None, location='eu-west-2', policy=None)
-    return "hello"
+    try:
+        conn = boto.connect_s3(keyId,sKeyId, host='s3.eu-west-2.amazonaws.com')
+        send = conn.create_bucket(bucketName, headers=None, location='eu-west-2', policy=None)
+    except Exception as e:
+        print(e)
+        return e
+    else:
+        bucket={}
+        bucket['bucket_name']= bucketName
+        bucket['user_id']= user_id
+        Sql.new_bucket(bucket)
+        output= {}
+        output['data'] = []
+        output['data'].append(bucketName)
+        output['data'].append(user_id)
+        return jsonify(output)
 
 #TODO
 @documents.route("/post_document/<user_id>", methods=['POST'])
@@ -33,9 +43,7 @@ def new_document(user_id):
 
     data = request.files.to_dict()
     print(data)
-    bucketName=str(user_id) + "12345"
-    keyId =config.aws_access_key_id
-    sKeyId= config.aws_secret_access_key
+    bucketName=str(user_id)
     conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
     bucket = conn.get_bucket(bucketName)
 
@@ -82,8 +90,6 @@ def get_document(bucket_id, doc_name):
     url = key.generate_url(3600, query_auth=True, force_http=True)
     return url
 
-def bucket_id_calc(id):
-    return (str(id) + "12345")
 
 def build_output(results):
     output = {}

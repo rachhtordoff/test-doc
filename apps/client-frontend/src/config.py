@@ -14,4 +14,4 @@ SECURE_API_URL = os.environ['SECURE_API_URL']
 
 os.environ['S3_USE_SIGV4'] = 'True'
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'pages'])
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'pages'])

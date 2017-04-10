@@ -1,6 +1,6 @@
 from src.app import db
 from sqlalchemy import create_engine
-from src.models import Setup, userdetails, UserDocument, UserEvent
+from src.models import Setup, userdetails, UserDocument, UserEvent, bucket
 
 class Sql:
     session = db.create_scoped_session()
@@ -10,6 +10,9 @@ class Sql:
 
     def get_user(params):
         return Sql.session.query(userdetails).filter_by(**params).all()
+
+    def get_bucket(params):
+        return Sql.session.query(bucket).filter_by(**params).all()
 
 
     def get_user_with_details_documents(params):
@@ -58,6 +61,12 @@ class Sql:
         Sql.session.commit()
         return Sql.get_user_events(try_event.to_dict())
 
+    def new_bucket(params):
+        try_bucket = bucket(**params)
+        Sql.session.add(try_bucket)
+        Sql.session.commit()
+        print(Sql.get_bucket(try_bucket.to_dict()))
+        return Sql.get_bucket(try_bucket.to_dict())
 
 #start of update sql statments
     def update_user(id, params):

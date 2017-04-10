@@ -18,7 +18,10 @@ ENV SQLALCHEMY_PORT '5432'
 ENV SQLALCHEMY_DB 'optiself_user'
 
 #amazon settings
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 
 COPY / /opt/
 
