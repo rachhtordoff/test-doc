@@ -8,10 +8,10 @@ from werkzeug import secure_filename
 from src import config
 import urllib.request
 
-
 # This is the blueprint object that gets registered into the app in blueprints.py.
 documents = Blueprint('documents', __name__,
                     template_folder='templates')
+
 
 
 @documents.route("/documents",  methods=['GET'])
@@ -22,11 +22,11 @@ def documents_main():
         id=session['user_id']
         pagetitle= "Client Buckets"
         user_buckets = get_all_user_buckets()
-        print(user_buckets)
-    #    for id in user_buckets['data'][0]:
-    #        print(id[:-4])
-
-        return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=user_buckets)
+        bucket_dict = []
+        for bucket in user_buckets['data']:
+            username = get_user_account_with_id(bucket['user_id'])
+            bucket_dict.append({'Client_name':username['data'][0]['forname'], 'bucket_name': bucket['bucket_name']})
+        return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=bucket_dict)
 
 @documents.route("/bucket/<bucket_name>",  methods=['GET'])
 def get_buckets(bucket_name):
@@ -68,7 +68,18 @@ def download_document(doc_name, bucket_name):
         <body><p>URL: <a href=\"%s\">%s</a></p></body>
         </html>"""
         whole = wrapper % (doc_name, documents, documents)
-        return whole
+    return whole
+
+@documents.route("/delete-document/<doc_name>/<bucket_name>",  methods=['POST'])
+def delete_document(doc_name, bucket_name):
+    if 'user_id' not in session:
+        return 'session ended'
+    else:
+        documents = remove_document(bucket_name, doc_name)
+        if documents == 200:
+            return redirect('/bucket/' + bucket_name)
+        else:
+            return "not deleted"
 
 def post_document(userid, file_content, file_name):
     user_id=str(userid)
@@ -90,8 +101,14 @@ def get_all_user_buckets():
 def get_document(bucket_id, doc_name):
     bucket_id=str(bucket_id)
     response = requests.get(config.SECURE_API_URL + '/get_document/' + bucket_id + '/' + doc_name)
-    #data = json.loads(response.text)
+    print(response.status_code)
     return response.text
+
+def remove_document(bucket_name, doc_name):
+    response = requests.put(config.SECURE_API_URL + '/delete_document/' + bucket_name + '/' + doc_name)
+    print(response.status_code)
+    return response.status_code
+
 
 def allowed_file(filename):
     return '.' in filename and \

@@ -58,7 +58,6 @@ def search_documents(user_id):
 #Connect to S3
     conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
     bucketName =  (user_id)
-    print(bucketName)
     bucket = conn.get_bucket(bucketName, validate=False)
     bucket_list = bucket.list()
     output = {}
@@ -71,11 +70,11 @@ def search_documents(user_id):
 def get_buckets():
 #Connect to S3
     conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
-    bucket = conn.get_all_buckets()
+    bucket = Sql.get_all_buckets()
     output = {}
     output['data'] = []
     for key in bucket:
-        output['data'].append(key.name)
+        output['data'].append(key.to_dict())
     return jsonify(output)
 
 #TODO
@@ -90,6 +89,14 @@ def get_document(bucket_id, doc_name):
     url = key.generate_url(3600, query_auth=True, force_http=True)
     return url
 
+@documents.route("/delete_document/<bucket_id>/<doc_name>", methods=['PUT'])
+def delete_document(bucket_id, doc_name):
+    #call method to make the actual search
+    conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
+    bucketName =  str(bucket_id)
+    bucket = conn.get_bucket(bucketName, validate=False)
+    key = bucket.delete_key(doc_name)
+    return "success"
 
 def build_output(results):
     output = {}

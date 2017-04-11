@@ -14,6 +14,9 @@ class Sql:
     def get_bucket(params):
         return Sql.session.query(bucket).filter_by(**params).all()
 
+    def get_all_buckets():
+        return Sql.session.query(bucket).all()
+
 
     def get_user_with_details_documents(params):
         user = Sql.session.query(userdetails).filter_by(**params).all()

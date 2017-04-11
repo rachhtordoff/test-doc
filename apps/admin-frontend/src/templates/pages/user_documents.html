@@ -19,7 +19,9 @@
           <tr>
             <td>{{doc}}</td>
             <td><a href="/download-document/{{doc}}/{{bucket_name}}">Download Link</a></td>
-            <td><a href="/delete-document/{{doc}}/{{bucket_name}}">Delete</a></td>
+            <form method="POST" action="/delete-document/{{doc}}/{{bucket_name}}">
+            <td><input type="submit" value="Delete"></input></td>
+            <form>
           </tr>
           {% endfor %}
         </tbody>
