@@ -71,11 +71,11 @@ def search_documents(user_id):
 def get_buckets():
 #Connect to S3
     conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
-    bucket = conn.get_all_buckets()
+    bucket = Sql.get_all_buckets()
     output = {}
     output['data'] = []
     for key in bucket:
-        output['data'].append(key.name)
+        output['data'].append(key.to_dict())
     return jsonify(output)
 
 #TODO

@@ -17,11 +17,11 @@
             </tr>
         </thead>
         <tbody>
-                {% for bucket_name in user_buckets['data'] %}
+                {% for bucket_name in user_buckets %}
           <tr>
             <td></td>
-            <td>client name here</td>
-            <td><a href="/bucket/{{bucket_name}}"> bucket </a></td>
+            <td>{{bucket_name['Client_name']}}</td>
+            <td><a href="/bucket/{{bucket_name['bucket_name']}}"> {{bucket_name['bucket_name']}} </a></td>
 
           </tr>
           {% endfor %}

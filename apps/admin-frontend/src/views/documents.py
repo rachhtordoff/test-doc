@@ -22,11 +22,12 @@ def documents_main():
         id=session['user_id']
         pagetitle= "Client Buckets"
         user_buckets = get_all_user_buckets()
-        print(user_buckets)
-        for id in user_buckets['data'][0]:
-    #        print(id[:-4])
-
-        return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=user_buckets)
+        bucket_dict = []
+        for bucket in user_buckets['data']:
+            print(bucket['bucket_name'])
+            username = get_user_account_with_id(bucket['user_id'])
+            bucket_dict.append({'Client_name':username['data'][0]['forname'], 'bucket_name': bucket['bucket_name']})
+        return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=bucket_dict)
 
 @documents.route("/bucket/<bucket_name>",  methods=['GET'])
 def get_buckets(bucket_name):
