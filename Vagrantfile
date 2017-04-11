@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
       require_relative 'uniproject/forward_ports'
       forward_ports(config)
     else
-      print colorize_red("you have not specified any ports to forward")
+      print "you have not specified any ports to forward"
     end
   end
   config.vm.provision :docker
