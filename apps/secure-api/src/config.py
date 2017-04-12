@@ -22,4 +22,4 @@ postgresql_string = 'postgresql://{}:{}@{}:{}/{}'
 SQLALCHEMY_DATABASE_URI = postgresql_string.format(SQLALCHEMY_USER, SQLALCHEMY_PASSWORD, SQLALCHEMY_HOST, SQLALCHEMY_PORT, SQLALCHEMY_DB)
 
 aws_access_key_id = os.environ['ACCESS_KEY']
-aws_secret_access_key = os.environ['SECRET_KEY']
+aws_secret_access_key = os.environ['aws_SECRET_KEY']

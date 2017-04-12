@@ -17,8 +17,10 @@
     </div>
 
     <div class="col-sm-7">
-      <form method="POST" action="/documents" enctype="multipart/form-data">
-      <input type="file" name="file">
+      <form method="post" action="/documents" enctype="multipart/form-data">
+      <input value="{{bucket_name}}" name="bucket_name"></input>
+      <input type="file" name="file"></input>
+
       <p>Upload document</p>
       <button class="btn" onclick="myFunction()">Try</button>
 

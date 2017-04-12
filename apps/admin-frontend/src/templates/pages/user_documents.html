@@ -21,17 +21,22 @@
             <td><a href="/download-document/{{doc}}/{{bucket_name}}">Download Link</a></td>
             <form method="POST" action="/delete-document/{{doc}}/{{bucket_name}}">
             <td><input type="submit" value="Delete"></input></td>
-            <form>
+          </form>
           </tr>
           {% endfor %}
         </tbody>
       </table>
-</form>
+    </div>
+    <div class="col-sm-5">
+      <form method="post" action="/post-document" enctype="multipart/form-data">
+      <input value="{{bucket_name}}" name="bucket_name"></input>
+      <input type="file" name="file"></input>
+      <p>Upload document</p>
+      <button class="btn" onclick="myFunction()">Try</button>
+
     </div>
 
-
   </div>
-
 </div>
 
 <script>
