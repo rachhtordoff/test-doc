@@ -7,6 +7,8 @@ from .user_controller import get_user_account_with_id
 from werkzeug import secure_filename
 from src import config
 import urllib.request
+from json import dumps
+
 
 # This is the blueprint object that gets registered into the app in blueprints.py.
 documents = Blueprint('documents', __name__,
@@ -40,17 +42,17 @@ def get_buckets(bucket_name):
         return render_template('pages/user_documents.html', pagetitle=pagetitle, documents=documents, bucket_name=bucket_id)
 
 
-@documents.route("/documents",  methods=['POST'])
+@documents.route("/post-document",  methods=['POST'])
 def documents_upload():
-   if request.method == 'POST':
+    if request.method == 'POST':
       file = request.files['file']
-      user_id= session['user_id']
+      bucket_name = request.form['bucket_name']
       if file and allowed_file(file.filename):
         file_content = file.read()
         file_name = file.filename
-        docs = post_document(user_id, file_content, file_name)
+        docs = post_document(bucket_name, file_content, file_name)
         if docs == 200:
-            return redirect('/documents')
+            return redirect('/bucket/' + bucket_name)
         else:"failed to upload"
       else:
         return "not a valid file type"
@@ -81,10 +83,9 @@ def delete_document(doc_name, bucket_name):
         else:
             return "not deleted"
 
-def post_document(userid, file_content, file_name):
-    user_id=str(userid)
+def post_document(bucket_id, file_content, file_name):
     file_store = {file_name: file_content}
-    r = requests.request("POST", config.SECURE_API_URL + '/post_document/'+ user_id,  files=file_store)
+    r = requests.post(config.SECURE_API_URL + '/post_document/'+ bucket_id,  files=file_store)
     return r.status_code
 
 def get_documents(userid):

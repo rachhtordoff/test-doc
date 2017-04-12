@@ -38,14 +38,11 @@ def new_bucket(user_id):
         return jsonify(output)
 
 #TODO
-@documents.route("/post_document/<user_id>", methods=['POST'])
-def new_document(user_id):
-
+@documents.route("/post_document/<bucket_id>", methods=['POST'])
+def new_document(bucket_id):
     data = request.files.to_dict()
-    print(data)
-    bucketName=str(user_id)
     conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
-    bucket = conn.get_bucket(bucketName)
+    bucket = conn.get_bucket(bucket_id)
 
     for key, value in data.items():
         new_key = bucket.new_key(key)
@@ -53,12 +50,11 @@ def new_document(user_id):
     return "success"
 
 #TODO
-@documents.route("/get_documents/<user_id>", methods=['GET'])
-def search_documents(user_id):
+@documents.route("/get_documents/<bucket_id>", methods=['GET'])
+def search_documents(bucket_id):
 #Connect to S3
     conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
-    bucketName =  (user_id)
-    bucket = conn.get_bucket(bucketName, validate=False)
+    bucket = conn.get_bucket(bucket_id, validate=False)
     bucket_list = bucket.list()
     output = {}
     output['data'] = []
@@ -71,6 +67,17 @@ def get_buckets():
 #Connect to S3
     conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
     bucket = Sql.get_all_buckets()
+    output = {}
+    output['data'] = []
+    for key in bucket:
+
+        output['data'].append(key.to_dict())
+    return jsonify(output)
+
+@documents.route("/get_bucket/<user_id>", methods=['GET'])
+def get_bucket_by_user_id(user_id):
+#Connect to S3
+    bucket = Sql.get_bucket({"user_id":user_id})
     output = {}
     output['data'] = []
     for key in bucket:

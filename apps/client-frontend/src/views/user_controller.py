@@ -44,6 +44,13 @@ def get_user_account_with_id(id):
     data = json.loads(resp.text)
     return data
 
+def get_bucket_details(user_id):
+    id= str(id)
+    resp = requests.get(config.SECURE_API_URL + '/get_bucket/' + id)
+    data = json.loads(resp.text)
+    return data
+
+
 
 def get_user_details_all(id):
     id= str(id)
