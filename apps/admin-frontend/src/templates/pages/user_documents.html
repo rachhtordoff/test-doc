@@ -5,7 +5,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-sm-5">
+    <div class="col-sm-10">
       <table class="table">
         <thead>
           <tr>
@@ -27,12 +27,46 @@
         </tbody>
       </table>
     </div>
-    <div class="col-sm-5">
+  </div>
+    <div class="col-sm-2">
+      <h3>Upload a document</h3>
+
       <form method="post" action="/post-document" enctype="multipart/form-data">
-      <input value="{{bucket_name}}" name="bucket_name"></input>
-      <input type="file" name="file"></input>
-      <p>Upload document</p>
-      <button class="btn" onclick="myFunction()">Try</button>
+      <input value="{{bucket_name}}" name="bucket_name" hidden></input>
+      <input type="file" name="file"></input></br>
+      <button class="btn" onclick="myFunction()">Upload</button>
+</form>
+    </div>
+    <div class="col-sm-4">
+      <h3>Documents needed</h3>
+      <form method="post" action="/request-documents" enctype="multipart/form-data">
+      <input type="checkbox"  name="passport"> Passport</input></br>
+      <input type="checkbox"  name="driving_licence"> Driving Licence</input></br>
+      <input type="checkbox"  name="utility_bill">3 months of utility bill</input></br>
+      <input type="checkbox"  name="bank_statments"> 3 months of bank account statments</input></br>
+      <input type="checkbox"  name="p60">P60</input></br>
+      <input type="checkbox"  name="payslips_13_weeks"> 13 weeks of payslips</input></br>
+      <input type="checkbox"  name="cis_vouchers"> 12 of CIS vouchers</input></br>
+      <input type="checkbox"  name="sa302"> 3 years of SA302</input></br>
+      <input type="checkbox"  name="tax_overview">3 years of tax overview </input></br>
+      <input type="checkbox"  name="signed_accounts"> 3 year signed accounts</input></br>
+      <input type="checkbox"  name="deposit_proof"> proof of deposit</input></br>
+      <input type="checkbox"  name="gifted_letter"> gifted letter</input></br>
+      <input type="checkbox"  name="marriage_certificate"> marraige certificate</input></br>
+      <input type="checkbox"  name="visa"> visa</input></br>
+      <input type="checkbox"  name="tax_credits_a_n">tax credits award notice</input></br>
+      <input type="checkbox"  name="dLA_a_n"> DLA award notice</input></br>
+      <input type="checkbox"  name="r_mortgage_statement">Residential mortgage statement</input></br>
+      <input type="checkbox"  name="r_mortgage_offer">Residential mortgage offer</input></br>
+      <input type="checkbox"  name="btl_mortgage_statement">Buy to let mortgage statment</input></br>
+      <input type="checkbox"  name="btl_mortgage_offer"> Buy to let mortgage offer </input></br>
+      <input type="checkbox"  name="bank_statment_rental_income"> bank statements rental income</input></br>
+      <input type="checkbox"  name="tenancy_agreement">Tenancy agreement</input></br>
+      <input type="checkbox"  name="other"> Other </input>
+    </br>
+
+  </br>
+      <button class="btn">Request documents</button>
 
     </div>
 
@@ -45,6 +79,6 @@ function myFunction() {
     x.disabled = true;
 }
 </script>
-</form>
+
 
 {% endblock %}

@@ -10,10 +10,10 @@ import urllib.request
 from json import dumps
 
 
+
 # This is the blueprint object that gets registered into the app in blueprints.py.
 documents = Blueprint('documents', __name__,
                     template_folder='templates')
-
 
 
 @documents.route("/documents",  methods=['GET'])

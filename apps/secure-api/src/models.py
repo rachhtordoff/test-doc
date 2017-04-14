@@ -1,6 +1,8 @@
 from src.app import db
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Boolean
 from sqlalchemy.orm.session import Session
+from sqlalchemy.orm import relationship
+
 
 
 class Setup(db.Model):
@@ -48,12 +50,13 @@ class userdetails(db.Model):
         }
 
 
-class UserDocument(db.Model):
-    __tablename__ = 'userdocuments'
+class Documenttype(db.Model):
+    __tablename__ = 'documenttype'
 
     id = db.Column(db.Integer, primary_key=True)
-    document = db.Column(db.LargeBinary)
-    user_id = db.Column(db.Integer, ForeignKey("userdetails.id"))
+    document_type = db.Column(db.String(64))
+    notes =  db.Column(db.String(64))
+
 
     def save(self):  # pragma: no cover
         db.session.add(self)
@@ -62,18 +65,19 @@ class UserDocument(db.Model):
     def to_dict(self):
         return {
             "id" : self.id,
-            "document" : self.document,
-            "user_id" : self.user_id
+            "document_type" : self.document_type,
+            "notes" : self.notes
             }
 
 
-class UserEvent(db.Model):
-    __tablename__ = 'userevent'
+class uploadedDocument(db.Model):
+    __tablename__ = 'uploadeddocument'
+
     id = db.Column(db.Integer, primary_key=True)
-    event_name = db.Column(db.String(64))
-    event_date = db.Column(db.DateTime)
-    event_description = db.Column(db.String(64))
+    document_name = db.Column(db.String(64))
     user_id = db.Column(db.Integer, ForeignKey("userdetails.id"))
+    document_type_id = db.Column(db.Integer, ForeignKey("documenttype.id"))
+
 
     def save(self):  # pragma: no cover
         db.session.add(self)
@@ -82,11 +86,37 @@ class UserEvent(db.Model):
     def to_dict(self):
         return {
             "id" : self.id,
-            "event_name" : self.event_name,
-            "event_date" : self.event_date,
-            "event_description" : self.event_description,
-            "user_id" : self.user_id
-        }
+            "document_type" : self.document_type,
+            "user_id" : self.user_id,
+            "document_name" : self.document_name
+            }
+
+
+class Documentstatus(db.Model):
+    __tablename__ = 'documentstatus'
+
+    status = db.Column(db.String(64))
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, ForeignKey("userdetails.id"))
+    document_type_id = db.Column(db.Integer, ForeignKey("documenttype.id"))
+
+    document_type = relationship("DocumentType")
+
+
+    def save(self):  # pragma: no cover
+        db.session.add(self)
+        db.session.commit()
+
+    def to_dict(self):
+        return {
+            "user_id" : self.user_id,
+            "document_type_id" : self.document_type_id,
+            "status" : self.status,
+            "id" : self.id,
+            "document_type": self.document_type'
+            }
+
 
 class bucket(db.Model):
     __tablename__ = 'bucket'
