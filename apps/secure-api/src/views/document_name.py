@@ -9,42 +9,42 @@ from src import config
 from boto.exception import S3CreateError
 
 
-documents = Blueprint('admin_document', __name__)
+document_name = Blueprint('document_name', __name__)
 
-@admin_document.route("/document_list/", methods=['POST'])
-def new_list():
+@document_name.route("/document_name/", methods=['POST'])
+def new_document_name():
     json_data = request.json
     #call method to inset the work item
-    results = Sql.new_document(json_data['data'])
+    results = Sql.new_document_status(json_data['data'])
 
     #build output to return to user
     return build_output(results)
 
 #TODO
-@admin_document.route("/document_list/", methods=['GET'])
-def search_lists():
+@document_name.route("/document_name/", methods=['GET'])
+def search_documents():
     #call method to make the actual search
-    results = Sql.get_document(request.args.to_dict())
+    results = Sql.new_document_status(request.args.to_dict())
 
     #build output to return to user
     return build_output(results)
 
 #TODO
-@admin_document.route("/document_list/<id>", methods=['GET'])
+@document_name.route("/document_name/<id>", methods=['GET'])
 def get_document(id):
     #call method to make the actual search
-    results = Sql.get_document({"id":id})
+    results = Sql.new_document_status({"id":id})
 
     #build output to return to user
     return build_output(results)
 
 #TODO
-@admin_document.route("/document_list/<id>", methods=['PUT'])
-def update_list(id):
+@document_name.route("/document_name/<id>", methods=['PUT'])
+def update_document_name(id):
     json_data = request.json
 
     #call method to inset the work item
-    results = Sql.update_property(id, json_data['data'])
+    results = Sql.update_document_status(id, json_data['data'])
 
     #build output to return to user
     return build_output(results)

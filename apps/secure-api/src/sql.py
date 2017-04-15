@@ -53,7 +53,7 @@ class Sql:
         return Sql.get_user_login(try_usersetup.to_dict())
 
     def new_document_status(params):
-        try_status = Setup(**params)
+        try_status = Documentstatus(**params)
         Sql.session.add(try_status)
         Sql.session.commit()
         return Sql.get_document_status(try_status.to_dict())

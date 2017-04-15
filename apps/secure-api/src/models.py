@@ -101,7 +101,7 @@ class Documentstatus(db.Model):
     user_id = db.Column(db.Integer, ForeignKey("userdetails.id"))
     document_type_id = db.Column(db.Integer, ForeignKey("documenttype.id"))
 
-    document_type = relationship("DocumentType")
+    document_type = relationship("Documenttype" , foreign_keys=[document_type_id])
 
 
     def save(self):  # pragma: no cover
@@ -114,7 +114,7 @@ class Documentstatus(db.Model):
             "document_type_id" : self.document_type_id,
             "status" : self.status,
             "id" : self.id,
-            "document_type": self.document_type'
+            "document_type": self.document_type
             }
 
 

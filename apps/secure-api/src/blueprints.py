@@ -1,5 +1,5 @@
 # Import every blueprint file
-from src.views import general, user, documents, events
+from src.views import general, user, documents, events, document_name, document_status
 
 
 
@@ -11,6 +11,8 @@ def register_blueprints(app):
     app.register_blueprint(user.user)
     app.register_blueprint(events.events)
     app.register_blueprint(documents.documents)
+    app.register_blueprint(document_name.document_name)
+    app.register_blueprint(document_status.document_status)
 
     # All done!
     app.logger.info("Blueprints registered")
