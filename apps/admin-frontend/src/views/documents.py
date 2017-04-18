@@ -37,9 +37,18 @@ def get_buckets(bucket_name):
     else:
         id=session['user_id']
         bucket_id = (int(bucket_name))
+        client_id = (bucket_name [:-6])
+        output = []
+        document_types = {}
+        get_types = get_all_types()
+        for type in get_types:
+            type_id = type['id']
+
+            print(type_id)
+        print(get_types)
         documents = get_documents(bucket_id)
         pagetitle= "%s's documents" % bucket_name
-        return render_template('pages/user_documents.html', pagetitle=pagetitle, documents=documents, bucket_name=bucket_id)
+        return render_template('pages/user_documents.html', pagetitle=pagetitle, documents=documents, bucket_name=bucket_id, types=get_types)
 
 
 @documents.route("/post-document",  methods=['POST'])
@@ -91,6 +100,23 @@ def post_document(bucket_id, file_content, file_name):
 def get_documents(userid):
     user_id=str(userid)
     response = requests.get(config.SECURE_API_URL + '/get_documents/'+ user_id)
+    data = json.loads(response.text)
+    return data
+
+def get_status(userid):
+    user_id=str(userid)
+    response = requests.get(config.SECURE_API_URL + '/document_status/'+ user_id)
+    data = json.loads(response.text)
+    print(data)
+    return data
+
+def get_all_types():
+    response = requests.get(config.SECURE_API_URL + '/document_types/')
+    data = json.loads(response.text)
+    return data
+
+def get_types_for_id(user_id):
+    response = requests.get(config.SECURE_API_URL + '/document_type/' + user_id)
     data = json.loads(response.text)
     return data
 

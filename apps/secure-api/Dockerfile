@@ -18,8 +18,8 @@ ENV SQLALCHEMY_PORT '5432'
 ENV SQLALCHEMY_DB 'optiself_user'
 
 #amazon settings
-ENV ACCESS_KEY 'AKIAICXOUOMKVT74IOBA'
-ENV aws_SECRET_KEY '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'
+
+
 COPY / /opt/
 
 RUN apt-get update

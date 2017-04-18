@@ -15,8 +15,8 @@ document_status = Blueprint('document_status', __name__)
 def new_document_name():
     json_data = request.json
     bucket={}
-    bucket['document_type_id']= '1'
-    bucket['user_id']= '1'
+    bucket['document_type_id']= '3'
+    bucket['user_id']= '6'
     bucket['status'] = "uploaded"
     print(bucket)
     results = Sql.new_document_status(bucket)
@@ -24,8 +24,7 @@ def new_document_name():
     output['data'] = []
     for key in results:
         output['data'].append(key.to_dict())
-    print (jsonify(output))
-    return "hello"
+    return jsonify(output)
 
 #TODO
 @document_status.route("/document_status/", methods=['GET'])
@@ -37,10 +36,11 @@ def search_documents():
     return build_output(results)
 
 #TODO
-@document_status.route("/document_status/<id>", methods=['GET'])
-def get_document(id):
+@document_status.route("/document_status/<user_id>", methods=['GET'])
+def get_document(user_id):
+    print(user_id)
     #call method to make the actual search
-    results = Sql.get_document_status({"id":id})
+    results = Sql.get_document_status({"user_id":user_id})
 
     #build output to return to user
     return build_output(results)

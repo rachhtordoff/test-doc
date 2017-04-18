@@ -56,6 +56,8 @@ class Documenttype(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     document_type = db.Column(db.String(64))
     notes =  db.Column(db.String(64))
+    documentstatus = db.relationship("Documentstatus", backref=db.backref('documenttype', uselist='false'))
+    documentsuploaded = db.relationship("uploadedDocument", backref=db.backref('documenttype', uselist='false'))
 
 
     def save(self):  # pragma: no cover
@@ -86,10 +88,13 @@ class uploadedDocument(db.Model):
     def to_dict(self):
         return {
             "id" : self.id,
-            "document_type" : self.document_type,
+            "document_type" : self.document_type_id,
             "user_id" : self.user_id,
             "document_name" : self.document_name
             }
+
+    def __repr__(self):
+        self.to_dict
 
 
 class Documentstatus(db.Model):
@@ -101,21 +106,18 @@ class Documentstatus(db.Model):
     user_id = db.Column(db.Integer, ForeignKey("userdetails.id"))
     document_type_id = db.Column(db.Integer, ForeignKey("documenttype.id"))
 
-    document_type = relationship("Documenttype" , foreign_keys=[document_type_id])
-
-
     def save(self):  # pragma: no cover
         db.session.add(self)
         db.session.commit()
+
 
     def to_dict(self):
         return {
             "user_id" : self.user_id,
             "document_type_id" : self.document_type_id,
             "status" : self.status,
-            "id" : self.id,
-            "document_type": self.document_type
-            }
+            "id" : self.id
+                }
 
 
 class bucket(db.Model):
