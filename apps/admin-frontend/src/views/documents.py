@@ -46,6 +46,7 @@ def get_buckets(bucket_name):
             document_types[type['document_type']]['user_id'] = []
             document_types[type['document_type']]['status'] = []
             document_types[type['document_type']]['uploaded_doc'] = []
+            document_types[type['document_type']]['doc_url'] = []
 
             status_store = type["status"]
             for status in status_store:
@@ -56,9 +57,10 @@ def get_buckets(bucket_name):
             for document in document_store:
                 if document['user_id'] == int(client_id):
                     document_types[type['document_type']]['uploaded_doc'].append(dict({"doc_name": document['document_name']}))
+                    documents = get_document(bucket_id,  document['document_name'])
+                    document_types[type['document_type']]['doc_url'].append(dict({"url": documents}))
 
             output.append(document_types[type['document_type']])
-
         documents = get_documents(bucket_id)
         pagetitle= "%s's documents" % bucket_name
         return render_template('pages/user_documents.html', pagetitle=pagetitle, documents=documents, bucket_name=bucket_id, types=output)

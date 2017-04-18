@@ -17,7 +17,7 @@ def new_document_name():
     bucket={}
     bucket['document_type_id']= '1'
     bucket['user_id']= '2'
-    bucket['document_name'] = "rach_p60"
+    bucket['document_name'] = "rach_p60.pages"
     #call method to inset the work item
     results = Sql.new_document_name(bucket)
 

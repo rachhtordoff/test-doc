@@ -12,6 +12,7 @@
             <th>Document Type</th>
             <th>Required?</th>
             <th>Status</th>
+            <th>Download Links</th>
             <th>Add Note</th>
             <th>&nbsp;</th>
             </tr>
@@ -20,14 +21,29 @@
           {% for doc in types %}
           <tr>
             <td>{{doc['document_type']}}</td>
-            <td><a href="/download-document/{{doc}}/{{bucket_name}}">Download Link</a><form method="POST" action="/delete-document/{{doc}}/{{bucket_name}}">
-            <input type="submit" value="Delete"></input>
-          </form></td>
-          <td></td>
+            <td>
+              <input type="checkbox" name="vehicle" value="{{doc['document_type']}}"><br>
+
+            </td>
+
+
+          <td>
+            {% for state in doc['status'] %}
+            {{state['status']}}</br>
+            {% endfor %}
+          </td>
+
+          <td>
+            {% for url in doc['doc_url'] %}
+            <a href="{{url['url']}}"> Download link</a></br>
+            {% endfor %}
+          <!--  <form method="POST" action="/delete-document/{{doc}}/{{bucket_name}}">
+          <input type="submit" value="Delete"></input>
+        </form> -->
+      </td>
           <td></td>
           <td>
           <form method="post" action="/post-document" enctype="multipart/form-data">
-          <input value="{{bucket_name}}" name="bucket_name" hidden></input>
           <input type="file" name="file"></input></br>
           <button class="btn" onclick="myFunction()">Upload</button>
     </form>
