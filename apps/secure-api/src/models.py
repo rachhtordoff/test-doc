@@ -88,7 +88,7 @@ class uploadedDocument(db.Model):
     def to_dict(self):
         return {
             "id" : self.id,
-            "document_type" : self.document_type_id,
+            "document_type_id" : self.document_type_id,
             "user_id" : self.user_id,
             "document_name" : self.document_name
             }

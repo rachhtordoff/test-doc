@@ -14,8 +14,12 @@ document_name = Blueprint('document_name', __name__)
 @document_name.route("/document_name/", methods=['POST'])
 def new_document_name():
     json_data = request.json
+    bucket={}
+    bucket['document_type_id']= '1'
+    bucket['user_id']= '2'
+    bucket['document_name'] = "rach_p60"
     #call method to inset the work item
-    results = Sql.new_document_status(json_data['data'])
+    results = Sql.new_document_name(bucket)
 
     #build output to return to user
     return build_output(results)
@@ -24,7 +28,7 @@ def new_document_name():
 @document_name.route("/document_name/", methods=['GET'])
 def search_documents():
     #call method to make the actual search
-    results = Sql.new_document_status(request.args.to_dict())
+    results = Sql.new_document_name(request.args.to_dict())
 
     #build output to return to user
     return build_output(results)
@@ -33,7 +37,7 @@ def search_documents():
 @document_name.route("/document_name/<id>", methods=['GET'])
 def get_document(id):
     #call method to make the actual search
-    results = Sql.new_document_status({"id":id})
+    results = Sql.get_document_name({"id":id})
 
     #build output to return to user
     return build_output(results)
@@ -44,7 +48,7 @@ def update_document_name(id):
     json_data = request.json
 
     #call method to inset the work item
-    results = Sql.update_document_status(id, json_data['data'])
+    results = Sql.update_document_name(id, json_data['data'])
 
     #build output to return to user
     return build_output(results)

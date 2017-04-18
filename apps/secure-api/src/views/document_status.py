@@ -15,8 +15,8 @@ document_status = Blueprint('document_status', __name__)
 def new_document_name():
     json_data = request.json
     bucket={}
-    bucket['document_type_id']= '3'
-    bucket['user_id']= '6'
+    bucket['document_type_id']= '1'
+    bucket['user_id']= '3'
     bucket['status'] = "uploaded"
     print(bucket)
     results = Sql.new_document_status(bucket)

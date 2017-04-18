@@ -19,7 +19,6 @@ ENV SQLALCHEMY_DB 'optiself_user'
 
 #amazon settings
 
-
 COPY / /opt/
 
 RUN apt-get update

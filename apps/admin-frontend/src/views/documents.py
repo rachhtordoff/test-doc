@@ -37,18 +37,31 @@ def get_buckets(bucket_name):
     else:
         id=session['user_id']
         bucket_id = (int(bucket_name))
-        client_id = (bucket_name [:-6])
+        client_id = (bucket_name [:-5])
         output = []
         document_types = {}
         get_types = get_all_types()
         for type in get_types:
-            type_id = type['id']
+            document_types[type['document_type']] = (dict({"document_type": type['document_type']}))
+            document_types[type['document_type']]['user_id'] = []
+            document_types[type['document_type']]['status'] = []
+            document_types[type['document_type']]['uploaded_doc'] = []
 
-            print(type_id)
-        print(get_types)
+            status_store = type["status"]
+            for status in status_store:
+                if status['user_id'] == int(client_id):
+                    document_types[type['document_type']]['user_id'].append(dict({"user_id": status['user_id']}))
+                    document_types[type['document_type']]['status'].append(dict({"status" : status['status']}))
+            document_store = type['uploaded']
+            for document in document_store:
+                if document['user_id'] == int(client_id):
+                    document_types[type['document_type']]['uploaded_doc'].append(dict({"doc_name": document['document_name']}))
+
+            output.append(document_types[type['document_type']])
+
         documents = get_documents(bucket_id)
         pagetitle= "%s's documents" % bucket_name
-        return render_template('pages/user_documents.html', pagetitle=pagetitle, documents=documents, bucket_name=bucket_id, types=get_types)
+        return render_template('pages/user_documents.html', pagetitle=pagetitle, documents=documents, bucket_name=bucket_id, types=output)
 
 
 @documents.route("/post-document",  methods=['POST'])

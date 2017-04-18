@@ -26,6 +26,10 @@ def search_documents():
         for status in result.documentstatus:
             document_dict['status'].append(status.to_dict())
 
+        for doc in result.documentsuploaded:
+            document_dict['uploaded'].append(doc.to_dict())
+
+
         result_dict.append(document_dict)
 
     print(jsonify(result_dict))
