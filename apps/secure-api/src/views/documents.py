@@ -43,10 +43,15 @@ def new_document(bucket_id):
     data = request.files.to_dict()
     conn = boto.connect_s3(keyId,sKeyId, is_secure=False,host='s3.eu-west-2.amazonaws.com')
     bucket = conn.get_bucket(bucket_id)
-
+    print(data.items())
+    new_doc_name={}
     for key, value in data.items():
         new_key = bucket.new_key(key)
         new_key.set_contents_from_file(value)
+        new_doc_name['document_name']= key
+        new_doc_name['user_id']= bucket_id[:-5]
+        new_doc_name['document_type_id']= 3
+        Sql.new_document_name(new_doc_name)
     return "success"
 
 #TODO

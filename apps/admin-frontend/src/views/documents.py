@@ -43,12 +43,15 @@ def get_buckets(bucket_name):
         get_types = get_all_types()
         for type in get_types:
             document_types[type['document_type']] = (dict({"document_type": type['document_type']}))
+            document_types[type['document_type']]['id'] = (dict({"id": type['id']}))
             document_types[type['document_type']]['user_id'] = []
             document_types[type['document_type']]['status'] = []
             document_types[type['document_type']]['uploaded_doc'] = []
             document_types[type['document_type']]['doc_url'] = []
 
             status_store = type["status"]
+            if not status_store:
+                document_types[type['document_type']]['status'].append(dict({"status" : " "}))
             for status in status_store:
                 if status['user_id'] == int(client_id):
                     document_types[type['document_type']]['user_id'].append(dict({"user_id": status['user_id']}))
@@ -80,6 +83,24 @@ def documents_upload():
         else:"failed to upload"
       else:
         return "not a valid file type"
+
+@documents.route("/post-status",  methods=['POST'])
+def document_status():
+    if request.method == 'POST':
+        bucket_name = request.form['bucket_name']
+        user_id =  bucket_name[:-5]
+        status_dict = {}
+        status_dict['document_type_id'] = request.form['documentid']
+        if request.form['status'] != " ":
+            status_dict['status'] = request.form['status']
+            update = update_status(user_id, status_dict)
+            print(status_dict)
+        else:
+            status_dict['status'] = "Requested"
+            status_dict['user_id'] = user_id
+            new =  new_status(status_dict)
+            print(status_dict)
+    return redirect('/bucket/' + bucket_name)
 
 @documents.route("/download-document/<doc_name>/<bucket_name>",  methods=['GET'])
 def download_document(doc_name, bucket_name):
@@ -124,6 +145,26 @@ def get_status(userid):
     data = json.loads(response.text)
     print(data)
     return data
+
+def update_status(userid, params):
+    user_id=str(userid)
+    payload = {}
+    payload['data'] = params
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    response = requests.put(config.SECURE_API_URL + '/document_status/'+ user_id, data=json.dumps(payload), headers=headers)
+    data = json.loads(response.text)
+    print(data)
+    return data
+
+def new_status(params):
+    payload = {}
+    payload['data'] = params
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    response = requests.post(config.SECURE_API_URL + '/document_status/', data=json.dumps(payload), headers=headers)
+    data = json.loads(response.text)
+    print(data)
+    return data
+
 
 def get_all_types():
     response = requests.get(config.SECURE_API_URL + '/document_types/')

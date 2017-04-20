@@ -14,24 +14,29 @@
             <th>Status</th>
             <th>Download Links</th>
             <th>Add Note</th>
-            <th>&nbsp;</th>
+            <th>upload</th>
             </tr>
         </thead>
         <tbody>
           {% for doc in types %}
+
           <tr>
-            <td>{{doc['document_type']}}</td>
+            <form method="POST" action="/post-status">
+              <input value="{{bucket_name}}" name="bucket_name" hidden></input>
+
             <td>
-              <input type="checkbox" name="vehicle" value="{{doc['document_type']}}"><br>
+            <input  value="{{doc['id']['id']}}" name="documentid" hidden>{{doc['document_type']}}</input>
 
+          </td>
+          <td>
+              <button class="btn" type="submit">Request</button>
             </td>
-
-
           <td>
             {% for state in doc['status'] %}
-            {{state['status']}}</br>
+            <input  value="{{state['status']}}" name="status" hidden>{{state['status']}}</input>
             {% endfor %}
           </td>
+        </form>
 
           <td>
             {% for url in doc['doc_url'] %}
@@ -40,17 +45,21 @@
           <!--  <form method="POST" action="/delete-document/{{doc}}/{{bucket_name}}">
           <input type="submit" value="Delete"></input>
         </form> -->
-      </td>
+        </td>
           <td></td>
           <td>
           <form method="post" action="/post-document" enctype="multipart/form-data">
           <input type="file" name="file"></input></br>
+          <input value="{{bucket_name}}" name="bucket_name" hidden></input>
           <button class="btn" onclick="myFunction()">Upload</button>
-    </form>
-  </td>
+          </form>
+          </td>
+
           </tr>
+
           {% endfor %}
         </tbody>
+
       </table>
     </div>
   </div>
@@ -58,7 +67,6 @@
 
 
   </div>
-</div>
 
 <script>
 function myFunction() {

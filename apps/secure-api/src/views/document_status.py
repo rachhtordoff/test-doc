@@ -14,12 +14,7 @@ document_status = Blueprint('document_status', __name__)
 @document_status.route("/document_status/", methods=['POST'])
 def new_document_name():
     json_data = request.json
-    bucket={}
-    bucket['document_type_id']= '1'
-    bucket['user_id']= '3'
-    bucket['status'] = "uploaded"
-    print(bucket)
-    results = Sql.new_document_status(bucket)
+    results = Sql.new_document_status(json_data['data'])
     output = {}
     output['data'] = []
     for key in results:

@@ -66,8 +66,10 @@ def download_document(doc_name):
 def post_document(userid, file_content, file_name):
     user_id=str(userid)
     file_store = {file_name: file_content}
-    r = requests.request("POST", config.SECURE_API_URL + '/post_document/'+ user_id,  files=file_store)
+    r = requests.post(config.SECURE_API_URL + '/post_document/'+ user_id,  files=file_store)
+    print(r)
     return r.status_code
+
 
 def get_documents(userid):
     user_id=str(userid)

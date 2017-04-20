@@ -5,12 +5,36 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-sm-5">
+    <div class="col-sm-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Document Type</th>
+            <th>Required?</th>
+            <th>Status</th>
+            <th>Download Links</th>
+            <th>Notes</th>
+            <th>Upload Document</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
       {% for docs in documents['data'] %}
       <li>
 
-<a href="/download-document/{{docs}}"> {{docs}} </a>
+<a href="/download-document/{{docs}}">  {{docs}} </a>
 </li>
 {% endfor %}
 </form>
@@ -23,12 +47,13 @@
 
       <p>Upload document</p>
       <button class="btn" onclick="myFunction()">Try</button>
+    </form>
+
 
     </div>
 
   </div>
 
-</div>
 
 <script>
 function myFunction() {
@@ -36,6 +61,4 @@ function myFunction() {
     x.disabled = true;
 }
 </script>
-</form>
-
 {% endblock %}
