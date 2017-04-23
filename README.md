@@ -3,8 +3,6 @@ Docker Micro-service document admin application
 
 ## Install
 
-###1.
-First, pull this repo down into a folder
+1. First, pull this repo down into a folder
 
-####2.
-Then run `vagrant up`.
+2. Then run `vagrant up`.
