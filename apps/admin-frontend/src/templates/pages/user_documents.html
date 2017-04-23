@@ -15,6 +15,7 @@
             <th>Download Links</th>
             <th>Add Note</th>
             <th>upload</th>
+            <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>
@@ -32,9 +33,8 @@
               <button class="btn" type="submit">Request</button>
             </td>
           <td>
-            {% for state in doc['status'] %}
-            <input  value="{{state['status']}}" name="status" hidden>{{state['status']}}</input>
-            {% endfor %}
+            <input  value="{{doc['status']['id']}}" name="status_id" hidden></input>
+            <input  value="{{doc['status']['status']}}" name="status" hidden>{{doc['status']['status']}}</input>
           </td>
         </form>
 
@@ -50,11 +50,20 @@
           <td>
           <form method="post" action="/post-document" enctype="multipart/form-data">
           <input type="file" name="file"></input></br>
+          <input  value="{{doc['id']['id']}}" name="type_id" hidden></input>
           <input value="{{bucket_name}}" name="bucket_name" hidden></input>
           <button class="btn" onclick="myFunction()">Upload</button>
           </form>
           </td>
 
+          <td>
+            <form method="post" action="/accept-doc">
+                <input  value="{{doc['status']['id']}}" name="status_id" hidden></input>
+            <input  value="{{doc['id']['id']}}" name="type_id" hidden></input>
+            <input value="{{bucket_name}}" name="bucket_name" hidden></input>
+              <button class="btn" type="submit">Accept</button>
+            </form>
+            </td>
           </tr>
 
           {% endfor %}

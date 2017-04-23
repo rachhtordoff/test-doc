@@ -40,29 +40,33 @@ def get_buckets(bucket_name):
         client_id = (bucket_name [:-5])
         output = []
         document_types = {}
-        get_types = get_all_types()
+        get_types = get_types_for_id(client_id)
         for type in get_types:
             document_types[type['document_type']] = (dict({"document_type": type['document_type']}))
             document_types[type['document_type']]['id'] = (dict({"id": type['id']}))
             document_types[type['document_type']]['user_id'] = []
-            document_types[type['document_type']]['status'] = []
+            document_types[type['document_type']]['status'] = {}
             document_types[type['document_type']]['uploaded_doc'] = []
             document_types[type['document_type']]['doc_url'] = []
+            document_types[type['document_type']]['notes'] = []
+
 
             status_store = type["status"]
             if not status_store:
-                document_types[type['document_type']]['status'].append(dict({"status" : " "}))
+                document_types[type['document_type']]['status'] = dict({"status" : " "})
             for status in status_store:
                 if status['user_id'] == int(client_id):
                     document_types[type['document_type']]['user_id'].append(dict({"user_id": status['user_id']}))
-                    document_types[type['document_type']]['status'].append(dict({"status" : status['status']}))
+                    document_types[type['document_type']]['status'] = (dict({"status" : status['status'], "id" : status['id']}))
             document_store = type['uploaded']
             for document in document_store:
                 if document['user_id'] == int(client_id):
                     document_types[type['document_type']]['uploaded_doc'].append(dict({"doc_name": document['document_name']}))
                     documents = get_document(bucket_id,  document['document_name'])
                     document_types[type['document_type']]['doc_url'].append(dict({"url": documents}))
-
+            note_store = type["notes"]
+            for note in note_store:
+                document_types[type['document_type']]['notes'].append(dict({"note": note}))
             output.append(document_types[type['document_type']])
         documents = get_documents(bucket_id)
         pagetitle= "%s's documents" % bucket_name
@@ -74,10 +78,11 @@ def documents_upload():
     if request.method == 'POST':
       file = request.files['file']
       bucket_name = request.form['bucket_name']
+      document_type_id = request.form['type_id']
       if file and allowed_file(file.filename):
         file_content = file.read()
         file_name = file.filename
-        docs = post_document(bucket_name, file_content, file_name)
+        docs = post_document(bucket_name, file_content, file_name, document_type_id)
         if docs == 200:
             return redirect('/bucket/' + bucket_name)
         else:"failed to upload"
@@ -92,14 +97,29 @@ def document_status():
         status_dict = {}
         status_dict['document_type_id'] = request.form['documentid']
         if request.form['status'] != " ":
-            status_dict['status'] = request.form['status']
-            update = update_status(user_id, status_dict)
-            print(status_dict)
+            status_dict['status'] = "Requested"
+            status_dict['user_id'] = user_id
+            id = request.form['status_id']
+            update = update_status(id, status_dict)
         else:
             status_dict['status'] = "Requested"
             status_dict['user_id'] = user_id
             new =  new_status(status_dict)
-            print(status_dict)
+    return redirect('/bucket/' + bucket_name)
+
+
+@documents.route("/accept-doc",  methods=['POST'])
+def document_accept():
+    if request.method == 'POST':
+        bucket_name = request.form['bucket_name']
+        user_id =  bucket_name[:-5]
+        status_dict = {}
+        status_dict['document_type_id'] = request.form['type_id']
+        status_dict['status'] = "Accepted"
+        status_dict['user_id'] = user_id
+        id = request.form['status_id']
+        update = update_status(id, status_dict)
+        print(status_dict)
     return redirect('/bucket/' + bucket_name)
 
 @documents.route("/download-document/<doc_name>/<bucket_name>",  methods=['GET'])
@@ -128,9 +148,9 @@ def delete_document(doc_name, bucket_name):
         else:
             return "not deleted"
 
-def post_document(bucket_id, file_content, file_name):
+def post_document(bucket_id, file_content, file_name, type_id):
     file_store = {file_name: file_content}
-    r = requests.post(config.SECURE_API_URL + '/post_document/'+ bucket_id,  files=file_store)
+    r = requests.post(config.SECURE_API_URL + '/post_document/'+ bucket_id + '/' + type_id,  files=file_store)
     return r.status_code
 
 def get_documents(userid):
@@ -162,7 +182,9 @@ def new_status(params):
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
     response = requests.post(config.SECURE_API_URL + '/document_status/', data=json.dumps(payload), headers=headers)
     data = json.loads(response.text)
+    print("***")
     print(data)
+    print("**")
     return data
 
 
@@ -172,7 +194,7 @@ def get_all_types():
     return data
 
 def get_types_for_id(user_id):
-    response = requests.get(config.SECURE_API_URL + '/document_type/' + user_id)
+    response = requests.get(config.SECURE_API_URL + '/document_types/' + user_id)
     data = json.loads(response.text)
     return data
 

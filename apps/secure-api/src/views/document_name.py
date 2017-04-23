@@ -20,7 +20,6 @@ def new_document_name():
     bucket['document_name'] = "rach_p60.pages"
     #call method to inset the work item
     results = Sql.new_document_name(bucket)
-
     #build output to return to user
     return build_output(results)
 
