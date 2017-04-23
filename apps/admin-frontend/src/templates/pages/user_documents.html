@@ -5,39 +5,77 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-sm-5">
+    <div class="col-sm-12">
       <table class="table">
         <thead>
           <tr>
-            <th>Document name</th>
-            <th>&nbsp;</th>
+            <th>Document Type</th>
+            <th>Required?</th>
+            <th>Status</th>
+            <th>Download Links</th>
+            <th>Add Note</th>
+            <th>upload</th>
             <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>
-          {% for doc in documents['data'] %}
+          {% for doc in types %}
+
           <tr>
-            <td>{{doc}}</td>
-            <td><a href="/download-document/{{doc}}/{{bucket_name}}">Download Link</a></td>
-            <form method="POST" action="/delete-document/{{doc}}/{{bucket_name}}">
-            <td><input type="submit" value="Delete"></input></td>
+            <form method="POST" action="/post-status">
+              <input value="{{bucket_name}}" name="bucket_name" hidden></input>
+
+            <td>
+            <input  value="{{doc['id']['id']}}" name="documentid" hidden>{{doc['document_type']}}</input>
+
+          </td>
+          <td>
+              <button class="btn" type="submit">Request</button>
+            </td>
+          <td>
+            <input  value="{{doc['status']['id']}}" name="status_id" hidden></input>
+            <input  value="{{doc['status']['status']}}" name="status" hidden>{{doc['status']['status']}}</input>
+          </td>
+        </form>
+
+          <td>
+            {% for url in doc['doc_url'] %}
+            <a href="{{url['url']}}"> Download link</a></br>
+            {% endfor %}
+          <!--  <form method="POST" action="/delete-document/{{doc}}/{{bucket_name}}">
+          <input type="submit" value="Delete"></input>
+        </form> -->
+        </td>
+          <td></td>
+          <td>
+          <form method="post" action="/post-document" enctype="multipart/form-data">
+          <input type="file" name="file"></input></br>
+          <input  value="{{doc['id']['id']}}" name="type_id" hidden></input>
+          <input value="{{bucket_name}}" name="bucket_name" hidden></input>
+          <button class="btn" onclick="myFunction()">Upload</button>
           </form>
+          </td>
+
+          <td>
+            <form method="post" action="/accept-doc">
+                <input  value="{{doc['status']['id']}}" name="status_id" hidden></input>
+            <input  value="{{doc['id']['id']}}" name="type_id" hidden></input>
+            <input value="{{bucket_name}}" name="bucket_name" hidden></input>
+              <button class="btn" type="submit">Accept</button>
+            </form>
+            </td>
           </tr>
+
           {% endfor %}
         </tbody>
+
       </table>
     </div>
-    <div class="col-sm-5">
-      <form method="post" action="/post-document" enctype="multipart/form-data">
-      <input value="{{bucket_name}}" name="bucket_name"></input>
-      <input type="file" name="file"></input>
-      <p>Upload document</p>
-      <button class="btn" onclick="myFunction()">Try</button>
+  </div>
 
-    </div>
+
 
   </div>
-</div>
 
 <script>
 function myFunction() {
@@ -45,6 +83,6 @@ function myFunction() {
     x.disabled = true;
 }
 </script>
-</form>
+
 
 {% endblock %}
