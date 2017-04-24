@@ -122,6 +122,19 @@ def document_accept():
         print(status_dict)
     return redirect('/bucket/' + bucket_name)
 
+@documents.route("/add-note",  methods=['POST'])
+def add_note():
+    if request.method == 'POST':
+        bucket_name = request.form['bucket_name']
+        user_id =  bucket_name[:-5]
+        note_dict = {}
+        note_dict['document_type_id'] = request.form['type_id']
+        note_dict['note'] = request.form['note']
+        note_dict['user_id'] = user_id
+        update = new_note(note_dict)
+        print(note_dict)
+    return redirect('/bucket/' + bucket_name)
+
 @documents.route("/download-document/<doc_name>/<bucket_name>",  methods=['GET'])
 def download_document(doc_name, bucket_name):
     if 'user_id' not in session:
@@ -186,6 +199,18 @@ def new_status(params):
     print(data)
     print("**")
     return data
+
+def new_note(params):
+    payload = {}
+    payload['data'] = params
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    response = requests.post(config.SECURE_API_URL + '/document_note/', data=json.dumps(payload), headers=headers)
+    data = json.loads(response.text)
+    print("***")
+    print(data)
+    print("**")
+    return data
+
 
 
 def get_all_types():

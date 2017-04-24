@@ -1,0 +1,16 @@
+footer {
+ padding-top:20px;
+ padding-bottom:20px;
+ background-color:#242424;
+}
+
+
+.container{
+  background-color: grey!important;
+  color : black;
+}
+
+.georgiesbutton{
+  width:500px;
+  color:green;
+}

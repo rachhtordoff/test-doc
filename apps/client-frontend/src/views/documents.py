@@ -34,7 +34,7 @@ def documents_main():
                 if status['status'] == "Requested":
                     document_types[type['document_type']] =(dict({"document_type": type}))
                     document_types[type['document_type']]['doc_url'] = []
-                if status['status'] == "Uploaded":
+                elif status['status'] == "Uploaded":
                     document_types[type['document_type']] =(dict({"document_type": type}))
                     document_types[type['document_type']]['doc_url'] = []
                 for doc in type['uploaded']:

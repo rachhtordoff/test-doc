@@ -1,6 +1,6 @@
 from src.app import db
 from sqlalchemy import create_engine
-from src.models import Setup, userdetails, Documentstatus, bucket, uploadedDocument, Documenttype
+from src.models import Setup, userdetails, Documentstatus, bucket, uploadedDocument, Documenttype, DocumentNotes
 
 class Sql:
     session = db.create_scoped_session()
@@ -23,9 +23,11 @@ class Sql:
     def get_type(params):
         return Sql.session.query(Documenttype).filter_by(**params).all()
 
+    def get_notes(params):
+        return Sql.session.query(DocumentNotes).filter_by(**params).all()
+
     def get_document_status(params):
         return Sql.session.query(Documentstatus).filter_by(**params).all()
-
 
     def get_user_with_details_documents(params):
         user = Sql.session.query(userdetails).filter_by(**params).all()
@@ -58,6 +60,11 @@ class Sql:
         Sql.session.commit()
         return Sql.get_document_status(try_status.to_dict())
 
+    def new_document_note(params):
+        try_note = DocumentNotes(**params)
+        Sql.session.add(try_note)
+        Sql.session.commit()
+        return Sql.get_notes(try_note.to_dict())
 
     def new_user(params):
         try_user = userdetails(**params)
@@ -75,7 +82,6 @@ class Sql:
         try_bucket = bucket(**params)
         Sql.session.add(try_bucket)
         Sql.session.commit()
-        print(Sql.get_bucket(try_bucket.to_dict()))
         return Sql.get_bucket(try_bucket.to_dict())
 
     def new_doc_type(params):

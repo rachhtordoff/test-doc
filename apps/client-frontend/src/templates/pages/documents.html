@@ -38,7 +38,9 @@
               <a href="{{link[i]}}">{{i}}</a></br>
               {% endfor %}
               {% endfor %}
-            <td> </td>
+            <td> {% for note in docs[i]['document_type']['notes'] %}
+            {{note['note']}}</p>
+            {% endfor %}</td>
             <td>
               <input value="{{bucket_name}}" name="bucket_name" hidden></input>
               <input type="file" name="file"></input>

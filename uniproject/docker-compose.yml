@@ -24,15 +24,6 @@ secure_api:
   links:
     - postgres
 
-insecure_frontend:
-  build: /vagrant/apps/insecure-frontend
-  ports:
-    - "5110:8000"
-  volumes:
-    - /vagrant/apps/insecure-frontend:/opt
-  links:
-    - postgres
-
 
 #commodities docker containers
 postgres:
