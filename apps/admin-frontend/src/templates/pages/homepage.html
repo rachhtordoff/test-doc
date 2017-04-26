@@ -1,11 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="row">
+  <div class="col-sm-4">
 
+<ul class="list-group" style="margin-left:5px;">
+  <li class="list-group-item">
 
-{{details['data'][0]['forname']}}</br>
-{{details['data'][0]['surname']}}</br>
-{{details['data'][0]['date_of_birth']}}</br>
-{{details['data'][0]['gender']}}
+  </br>
+  <div class="row">
+  <div class="col-sm-6">
+    <b>Firstname:</b>
+  </div>
+    <div class="col-sm-6">
+{{details['data'][0]['forname']}}
+  </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+    <b>  Surname:</b>
+    </div>
+    <div class="col-sm-6">
+      {{details['data'][0]['surname']}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+    <b>  Gender:</b>
+    </div>
+    <div class="col-sm-6">
+      {{details['data'][0]['gender']}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+<b>      Date of birth: </b>
+      </div>
+    <div class="col-sm-6">
+      {{details['data'][0]['date_of_birth']}}
+
+    </div>
+  </div>
+</li>
+</ul>
+</div>
+</div>
 
 {% endblock %}

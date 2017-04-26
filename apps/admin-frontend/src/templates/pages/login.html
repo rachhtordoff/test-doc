@@ -1,28 +1,76 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="row" style="margin-left:5px;">
+  <div class="col-sm-6">
+      <h1>Login</h1>
+    </div>
+    <div class="col-sm-6">
+<h1>Register</div>
+</div>
+</br>
+
+<div class="row">
+  <div class="col-sm-6">
 <form method="POST" action="/login">
+<div class="login-container">
+  <ul class="list-group" style="margin-left:5px;">
+    <li class="list-group-item">
+    </br>
+    <div class="row">
+      <div class="col-sm-3">
+        Username:
+      </div>
+      <div class="col-sm-3">
+        <input type="text" name="username">
+      </div>
+    </div></br>
+<div class="row">
+      <div class="col-sm-3">
+        password:
+      </div>
+      <div class="col-sm-3">
+        <input type="text" name="password" >
+      </div>
+    </div>
+    <div class="row">
+    <input type="submit" value="Submit" class="pull-right btn-submit" style="margin-right:10px;">
+</div>
+  </li>
+</ul>
+</div>
+</form>
+</div>
+<div class="col-sm-6">
+<form method="POST" action="/register">
+
   <ul class="list-group" style="margin-left:5px;">
     <li class="list-group-item">
 
     </br>
     <div class="row">
-      <div class="col-sm-1">
+      <div class="col-sm-3">
         Username:
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-3">
         <input type="text" name="username">
       </div>
-      <div class="col-sm-1">
+    </div></br>
+    <div class="row">
+      <div class="col-sm-3">
         password:
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-3">
         <input type="text" name="password" >
       </div>
     </div>
+    <div class="row">
+    <input type="submit" value="Submit" class="pull-right btn-submit" style="margin-right:10px;">
+</div>
   </li>
 </ul>
-<input type="submit" value="Submit">
-
 </form>
+</div>
+</div>
+
 {% endblock %}\

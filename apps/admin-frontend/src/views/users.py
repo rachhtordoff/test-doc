@@ -20,8 +20,7 @@ def homepage():
 
 @users.route("/register", methods=['GET'])
 def register_page():
-    pagetitle = "Register"
-    return render_template('pages/register.html', pagetitle=pagetitle)
+    return render_template('pages/login.html')
 
 @users.route("/register", methods=['POST'])
 def register_user():
@@ -39,13 +38,14 @@ def register_user():
             account = new_user_account(account_id)
             session['user_id'] = account['data'][0]['id']
             return redirect('account-setup/' + str(account['data'][0]['id']))
-        except KeyError:
+        except IndexError:
             return "sorry, no user found"
+        except KeyError:
+            return "Problem with service "
 
 @users.route("/login", methods=['GET'])
 def login_page():
-    pagetitle = "Login"
-    return render_template('pages/login.html', pagetitle=pagetitle)
+    return render_template('pages/login.html')
 
 @users.route("/login", methods=['POST'])
 def login_user():
