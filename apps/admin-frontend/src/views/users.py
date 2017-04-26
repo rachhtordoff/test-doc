@@ -35,9 +35,12 @@ def register_user():
         account_id={}
         account_id['account_id']= setup_id
         account_id['complete']= "false"
-        account = new_user_account(account_id)
-        session['user_id'] = account['data'][0]['id']
-        return redirect('account-setup/' + str(account['data'][0]['id']))
+        try:
+            account = new_user_account(account_id)
+            session['user_id'] = account['data'][0]['id']
+            return redirect('account-setup/' + str(account['data'][0]['id']))
+        except KeyError:
+            return "sorry, no user found"
 
 @users.route("/login", methods=['GET'])
 def login_page():
@@ -50,15 +53,22 @@ def login_user():
     if request.method == 'POST':
         username  = request.form['username']
         password  = request.form['password']
-        set_up = get_user_setup(username, password)
-        user_account = get_user_account(set_up['data'][0]['id'])
-        if user_account['data'][0]['complete'] == 'false':
-            session['user_id'] = user_account['data'][0]['id']
-            return redirect('account-setup/' + str(user_account['data'][0]['id']))
-        elif user_account['data'][0]['complete'] == 'true':
-            session['user_id'] = user_account['data'][0]['id']
-            return redirect('user-home/' + str(user_account['data'][0]['id']))
-
+        try:
+            set_up = get_user_setup(username, password)
+            user_account = get_user_account(set_up['data'][0]['id'])
+            if user_account['data'][0]['type'] == 'admin':
+                if user_account['data'][0]['complete'] == 'false':
+                    session['user_id'] = user_account['data'][0]['id']
+                    return redirect('account-setup/' + str(user_account['data'][0]['id']))
+                elif user_account['data'][0]['complete'] == 'true':
+                    session['user_id'] = user_account['data'][0]['id']
+                    return redirect('user-home/' + str(user_account['data'][0]['id']))
+            else:
+                return "You must me an administrator to log in to this service."
+        except IndexError:
+            return "no user found"
+        except KeyError:
+            return "Problem with service "
 
 @users.route("/account-setup/<id>", methods=['GET'])
 def account_setup_page(id):

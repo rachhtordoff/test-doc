@@ -52,15 +52,23 @@ def login_user():
     if request.method == 'POST':
         username  = request.form['username']
         password  = request.form['password']
+    try:
         set_up = get_user_setup(username, password)
         user_account = get_user_account(set_up['data'][0]['id'])
-        if user_account['data'][0]['complete'] == 'false':
-            session['user_id'] = user_account['data'][0]['id']
-            return redirect('account-setup/' + str(user_account['data'][0]['id']))
-        elif user_account['data'][0]['complete'] == 'true':
-            session['user_id'] = user_account['data'][0]['id']
-            return redirect('user-home/' + str(user_account['data'][0]['id']))
+        if user_account['data'][0]['type'] == 'client':
+            if user_account['data'][0]['complete'] == 'false':
+                session['user_id'] = user_account['data'][0]['id']
+                return redirect('account-setup/' + str(user_account['data'][0]['id']))
+            elif user_account['data'][0]['complete'] == 'true':
+                session['user_id'] = user_account['data'][0]['id']
+                return redirect('user-home/' + str(user_account['data'][0]['id']))
+        else:
+            return "You must me an administrator to log in to this service."
+    except IndexError:
+        return "no user found"
 
+    except KeyError:
+        return "Problem with service "
 
 @users.route("/account-setup/<id>", methods=['GET'])
 def account_setup_page(id):

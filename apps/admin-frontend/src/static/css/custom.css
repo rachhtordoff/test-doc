@@ -4,7 +4,11 @@ footer {
  background-color:#242424;
 }
 
-body{ background: url(../../img/body-bg.png); color: #f2f2f2; font: 13px/1.7em 'Open Sans';}
+body{
+  background-color: #e6e6e6!important;
+  color: black;
+  font: 13px/1.7em 'Open Sans';
+}
 
 
 .georgiesbutton{
@@ -50,13 +54,6 @@ body{ background: url(../../img/body-bg.png); color: #f2f2f2; font: 13px/1.7em '
 #custom-bootstrap-menu.navbar-default .navbar-toggle:focus .icon-bar {
     background-color: #43996d;
 }
-
-
-
-
-
-/** Base Body Styles **/
-body{ background: url(../../img/body-bg.png); color:#838383; font: 13px/1.7em 'Open Sans';}
 
 
 .account-container {
