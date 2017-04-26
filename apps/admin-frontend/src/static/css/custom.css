@@ -5,7 +5,7 @@ footer {
 }
 
 body{
-  background-color: #e6e6e6;
+  background-color: #e6e6e6!important;
   color: black;
   font: 13px/1.7em 'Open Sans';
 }
@@ -54,13 +54,6 @@ body{
 #custom-bootstrap-menu.navbar-default .navbar-toggle:focus .icon-bar {
     background-color: #43996d;
 }
-
-
-
-
-
-/** Base Body Styles **/
-body{ background: url(../../img/body-bg.png); color:#838383; font: 13px/1.7em 'Open Sans';}
 
 
 .account-container {
