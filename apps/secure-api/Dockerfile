@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM python 3.5.3
 MAINTAINER Rachael Tordoff
 
 ENV APP_NAME fact-find-api
@@ -18,12 +18,9 @@ ENV SQLALCHEMY_PORT '5432'
 ENV SQLALCHEMY_DB 'optiself_user'
 
 #amazon settings
-ENV ACCESS_KEY 'AKIAJQXSSIPSI62SLREQ'
-ENV aws_SECRET_KEY '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'
-COPY / /opt/
 
-RUN apt-get update
-RUN apt-get install -y build-essential python3-dev python3-pip
+
+COPY / /opt/
 
 RUN apt-get install -y libpq-dev
 
