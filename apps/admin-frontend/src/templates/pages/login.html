@@ -2,27 +2,26 @@
 
 {% block content %}
 <form method="POST" action="/login">
+  <ul class="list-group" style="margin-left:5px;">
+    <li class="list-group-item">
 
-    <ul class="list-group" style="margin-left:5px;">
-      <li class="list-group-item">
-
-      </br>
-      <div class="row">
-        <div class="col-sm-1">
-          Username:
-        </div>
-        <div class="col-sm-2">
-          <input type="text" name="username">
-        </div>
-        <div class="col-sm-1">
-          password:
-        </div>
-        <div class="col-sm-2">
-          <input type="text" name="password" >
-        </div>
+    </br>
+    <div class="row">
+      <div class="col-sm-1">
+        Username:
       </div>
-    </li>
-  </ul>
+      <div class="col-sm-2">
+        <input type="text" name="username">
+      </div>
+      <div class="col-sm-1">
+        password:
+      </div>
+      <div class="col-sm-2">
+        <input type="text" name="password" >
+      </div>
+    </div>
+  </li>
+</ul>
 <input type="submit" value="Submit">
 
 </form>

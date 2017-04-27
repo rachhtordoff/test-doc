@@ -11,6 +11,8 @@ environment.sh
 # Icon must end with two \r
 Icon
 
+#### remove if needed-- docker
+Dockerfile
 
 # Thumbnails
 ._*

@@ -26,8 +26,22 @@ def documents_main():
         user="sally"
         get_bucket_id = get_bucket(id)
         bucket_id = get_bucket_id['data'][0]['bucket_name']
-        documents = get_documents(bucket_id)
-        return render_template('pages/documents.html', pagetitle=pagetitle, user=user, user_account= user_account, documents=documents, bucket_name=bucket_id)
+        gettypes = get_types(int(id))
+        output=[]
+        document_types = {}
+        for type in gettypes:
+            for status in type['status']:
+                print(status)
+                if status['status'] == "Requested":
+                    document_types[type['document_type']] =(dict({"document_type": type}))
+                    document_types[type['document_type']]['doc_url'] = []
+                elif status['status'] == "Uploaded":
+                    document_types[type['document_type']] =(dict({"document_type": type}))
+                    document_types[type['document_type']]['doc_url'] = []
+            for doc in type['uploaded']:
+                document_url = get_document(bucket_id,  doc['document_name'])
+        output.append(document_types)
+        return render_template('pages/documents.html', pagetitle=pagetitle, user=user, user_account= user_account, document=output, bucket_name=bucket_id)
 
 @documents.route("/documents",  methods=['POST'])
 def documents_upload():
@@ -35,11 +49,18 @@ def documents_upload():
       file = request.files['file']
       bucket_name = request.form['bucket_name']
       user_id = session['user_id']
+      document_type_id = request.form['type_id']
+      status_id = request.form['status_id']
       if file and allowed_file(file.filename):
         file_content = file.read()
         file_name = file.filename
-        docs = post_document(bucket_name, file_content, file_name)
+        docs = post_document(bucket_name, file_content, file_name, document_type_id)
         if docs == 200:
+            update_dict= {}
+            update_dict['document_type_id'] = int(document_type_id)
+            update_dict['status'] = "Uploaded"
+            update_dict['user_id'] = user_id
+            update_status(status_id, update_dict)
             return redirect('/documents')
         else:"failed to upload"
       else:
@@ -63,17 +84,40 @@ def download_document(doc_name):
         whole = wrapper % (doc_name, documents, documents)
         return whole
 
-def post_document(userid, file_content, file_name):
+def post_document(userid, file_content, file_name, type_id):
     user_id=str(userid)
     file_store = {file_name: file_content}
-    r = requests.request("POST", config.SECURE_API_URL + '/post_document/'+ user_id,  files=file_store)
+    r = requests.post(config.SECURE_API_URL + '/post_document/'+ user_id + '/' + type_id,  files=file_store)
+    print(r)
     return r.status_code
+
+def update_status(id, params):
+    status_id=str(id)
+    payload = {}
+    payload['data'] = params
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    response = requests.put(config.SECURE_API_URL + '/document_status/'+ status_id, data=json.dumps(payload), headers=headers)
+    data = json.loads(response.text)
+    print(data)
+    return data
 
 def get_documents(userid):
     user_id=str(userid)
     response = requests.get(config.SECURE_API_URL + '/get_documents/'+ user_id)
     data = json.loads(response.text)
     return data
+
+def get_types(userid):
+    user_id=str(userid)
+    response = requests.get(config.SECURE_API_URL + '/document_types/'+ user_id)
+    data = json.loads(response.text)
+    return data
+
+def get_document(bucket_id, doc_name):
+    bucket_id=str(bucket_id)
+    response = requests.get(config.SECURE_API_URL + '/get_document/' + bucket_id + '/' + doc_name)
+    print(response.status_code)
+    return response.text
 
 def get_bucket(user_id):
     user_id=str(user_id)

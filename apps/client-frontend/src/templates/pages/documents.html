@@ -5,30 +5,65 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-sm-5">
+    <div class="col-sm-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Document Type</th>
+            <th>Status</th>
+            <th>Download Links</th>
+            <th>Notes</th>
+            <th>Upload Document</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for docs in document %}
+            {% for i in docs %}
+          <tr>
+            <form method="post" action="/documents" enctype="multipart/form-data">
 
-      {% for docs in documents['data'] %}
-      <li>
+            <td> {{docs[i]['document_type']['document_type']}}
+              <input value="{{docs[i]['document_type']['id']}}" name="type_id" hidden></input></td>
+              <td>
+            {% for state in docs[i]['document_type']['status'] %}
+            <input value="{{state['id']}}" name="status_id" hidden></input>
 
-<a href="/download-document/{{docs}}"> {{docs}} </a>
-</li>
-{% endfor %}
+            {{state['status']}}
+            {% endfor %}
+            </td>
+
+            <td>
+              {% for link in docs[i]['doc_url'] %}
+                {% for i in link %}
+              <a href="{{link[i]}}">{{i}}</a></br>
+              {% endfor %}
+              {% endfor %}
+            <td> {% for note in docs[i]['document_type']['notes'] %}
+            {{note['note']}}</p>
+            {% endfor %}</td>
+            <td>
+              <input value="{{bucket_name}}" name="bucket_name" hidden></input>
+              <input type="file" name="file"></input>
+              <p>Upload document</p>
+              <button class="btn" onclick="myFunction()">Upload</button>
+            </form>
+
+              </td>
+          </tr>
+           {% endfor %}
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+
 </form>
     </div>
 
-    <div class="col-sm-7">
-      <form method="post" action="/documents" enctype="multipart/form-data">
-      <input value="{{bucket_name}}" name="bucket_name"></input>
-      <input type="file" name="file"></input>
 
-      <p>Upload document</p>
-      <button class="btn" onclick="myFunction()">Try</button>
-
-    </div>
 
   </div>
 
-</div>
 
 <script>
 function myFunction() {
@@ -36,6 +71,4 @@ function myFunction() {
     x.disabled = true;
 }
 </script>
-</form>
-
 {% endblock %}

@@ -1,14 +1,8 @@
-# vagrant-docker
-Example of a multi-service development environment
-
-Companion Blog Post: [http://devbandit.com/2015/05/29/vagrant-and-docker.html](http://devbandit.com/2015/05/29/vagrant-and-docker.html)
+# Amazon S3 and Python PSQL document admin Micro-service
+Docker Micro-service document admin application
 
 ## Install
 
-First, install the [vagrant-docker-compose](https://github.com/leighmcculloch/vagrant-docker-compose) plugin (as root).
+1. First, pull this repo down into a folder
 
-```bash
-vagrant plugin install vagrant-docker-compose
-```
-
-Then run `vagrant up`.
+2. Then run `vagrant up`.

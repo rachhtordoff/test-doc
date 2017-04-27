@@ -4,5 +4,4 @@ def forward_ports(config)
   config.vm.network "forwarded_port", guest: 5101, host: 5101
   config.vm.network "forwarded_port", guest: 5001, host: 5001
   config.vm.network "forwarded_port", guest: 5100, host: 5100
-  config.vm.network "forwarded_port", guest: 5110, host: 5110
 end

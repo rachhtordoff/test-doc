@@ -13,10 +13,10 @@
     <title>Optiself</title>
     {% endif %}
   </head>
-  <body>
     {% include '_fragments/nav.html' %}
+    <body>
+      <div class="container">
 
-    <div class="container">
       <h1>{{pagetitle}}</h1>
 
       {% with messages = get_flashed_messages() %}
@@ -30,12 +30,11 @@
       {% endwith %}
 
       {% block content %}{% endblock %}
-    </div> <!-- end of container -->
 <!--    {% include '_fragments/footer.html' %} -->
-
+</div>
+</body>
     <!-- Latest compiled and minified JavaScript -->
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     {% block script %}{% endblock %}
-  </body>
 </html>
