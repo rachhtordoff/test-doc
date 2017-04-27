@@ -16,12 +16,11 @@ def homepage():
     pagetitle="Homepage"
     if 'user_id' in session:
         session.clear()
-    return render_template('pages/index.html', pagetitle=pagetitle)
+    return render_template('pages/index.html')
 
 @users.route("/register", methods=['GET'])
 def register_page():
-    pagetitle = "Register"
-    return render_template('pages/register.html', pagetitle=pagetitle)
+    return render_template('pages/login.html')
 
 @users.route("/register", methods=['POST'])
 def register_user():
@@ -43,8 +42,7 @@ def register_user():
 
 @users.route("/login", methods=['GET'])
 def login_page():
-    pagetitle = "Login"
-    return render_template('pages/login.html', pagetitle=pagetitle)
+    return render_template('pages/login.html')
 
 @users.route("/login", methods=['POST'])
 def login_user():
