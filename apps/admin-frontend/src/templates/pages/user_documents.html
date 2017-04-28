@@ -5,17 +5,23 @@
 
 <div class="container">
   <div class="row">
+
     <div class="col-sm-12">
+
+
+                <ul class="list-group" style="margin-left:5px; max-height:1000px; height:1000px;">
+                  <li class="list-group-item">
+
       <table class="table">
         <thead>
           <tr>
-            <th>Document Type</th>
-            <th>Required?</th>
-            <th>Status</th>
-            <th>Download Links</th>
-            <th>Add Note</th>
-            <th>upload</th>
-            <th>&nbsp;</th>
+            <th  class="col-sm-3">Document Type</th>
+            <th class="col-sm-1">Required?</th>
+            <th class="col-sm-1">Status</th>
+            <th class="col-sm-2">Download Links</th>
+            <th class="col-sm-3">Add Note</th>
+            <th class="col-sm-3">upload</th>
+            <th class="col-sm-1">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
@@ -30,7 +36,7 @@
 
           </td>
           <td>
-              <button class="btn" type="submit">Request</button>
+              <button class="btn btn-default " type="submit">Request</button>
             </td>
           <td>
             <input  value="{{doc['status']['id']}}" name="status_id" hidden></input>
@@ -67,7 +73,7 @@
             <form method="post" action="/add-note">
             <input type="text" name="note"></input></br>
             <input  value="{{doc['id']['id']}}" name="type_id" hidden></input>
-            <input value="{{bucket_name}}" name="bucket_name" hidden></input>
+            <input value="{{bucket_name}}" name="bucket_name" hidden></input></br>
             <button class="btn" type="submit">Add</button>
             </form>
           </td>
@@ -76,7 +82,7 @@
           <input type="file" name="file"></input></br>
           <input  value="{{doc['id']['id']}}" name="type_id" hidden></input>
           <input value="{{bucket_name}}" name="bucket_name" hidden></input>
-          <button class="btn" onclick="myFunction()">Upload</button>
+          <button class="btn btn-primary" onclick="myFunction()">Upload</button>
           </form>
           </td>
 
@@ -85,7 +91,7 @@
                 <input  value="{{doc['status']['id']}}" name="status_id" hidden></input>
             <input  value="{{doc['id']['id']}}" name="type_id" hidden></input>
             <input value="{{bucket_name}}" name="bucket_name" hidden></input>
-              <button class="btn" type="submit">Accept</button>
+              <button class="btn btn-success" type="submit">Accept</button>
             </form>
             </td>
           </tr>
@@ -94,7 +100,10 @@
         </tbody>
 
       </table>
+    </li>
+  </ul>
     </div>
+
   </div>
 
 

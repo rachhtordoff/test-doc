@@ -3,7 +3,7 @@ import json
 import requests
 from src import config
 import requests
-from .user_controller import new_user_setup, new_user_account, get_user_setup, get_user_account, get_user_account_with_id, update_user_details, create_user_bucket
+from .user_controller import new_user_setup, new_user_account, get_user_setup, get_user_account, get_user_account_with_id, update_user_details, create_user_bucket, check_set_up
 
 # This is the blueprint object that gets registered into the app in blueprints.py.
 users = Blueprint('users', __name__,
@@ -20,8 +20,7 @@ def homepage():
 
 @users.route("/register", methods=['GET'])
 def register_page():
-    pagetitle = "Register"
-    return render_template('pages/register.html', pagetitle=pagetitle)
+    return render_template('pages/login.html')
 
 @users.route("/register", methods=['POST'])
 def register_user():
@@ -30,22 +29,30 @@ def register_user():
         setup_data={}
         setup_data['username']= request.form['username']
         setup_data['password']= request.form['password']
-        data= new_user_setup(setup_data)
-        setup_id = data['data'][0]['id']
-        account_id={}
-        account_id['account_id']= setup_id
-        account_id['complete']= "false"
-        try:
-            account = new_user_account(account_id)
-            session['user_id'] = account['data'][0]['id']
-            return redirect('account-setup/' + str(account['data'][0]['id']))
-        except KeyError:
-            return "sorry, no user found"
+        check_username = check_set_up(setup_data['username'])
+        if check_username['data']:
+            return "sorry usrname exists"
+        else:
+            data= new_user_setup(setup_data)
+            setup_id = data['data'][0]['id']
+            account_id={}
+            account_id['account_id']= setup_id
+            account_id['complete']= "false"
+            try:
+                account = new_user_account(account_id)
+                session['user_id'] = account['data'][0]['id']
+                update = {}
+                update['type'] =  'admin'
+                update_user_details(session['user_id'], update)
+                return redirect('account-setup/' + str(account['data'][0]['id']))
+            except IndexError:
+                return "sorry, no user found"
+            except KeyError:
+                return "Problem with service "
 
 @users.route("/login", methods=['GET'])
 def login_page():
-    pagetitle = "Login"
-    return render_template('pages/login.html', pagetitle=pagetitle)
+    return render_template('pages/login.html')
 
 @users.route("/login", methods=['POST'])
 def login_user():

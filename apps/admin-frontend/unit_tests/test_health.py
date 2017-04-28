@@ -1,7 +1,6 @@
 from src.main import app
 import unittest
 
-
 class TestHealth(unittest.TestCase):
 
     def setUp(self):

@@ -27,6 +27,11 @@ def create_user_bucket(id):
     print(response)
     return response
 
+def check_set_up(username):
+    resp = requests.get(config.SECURE_API_URL+ '/get_usersetup/?username=' + username)
+    data = json.loads(resp.text)
+    return data
+
 def get_user_setup(username, password):
     resp = requests.get(config.SECURE_API_URL+ '/get_usersetup/?username=' + username + "&password=" + password)
     data = json.loads(resp.text)

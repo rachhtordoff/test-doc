@@ -2,7 +2,6 @@ from flask import request, Blueprint, Response, render_template, flash, redirect
 from flask import current_app
 import json
 import requests
-from ..forms import InitialSetup, AboutMe, FinanceDetails, PropertyDetails
 from .user_controller import get_user_account_with_id
 from werkzeug import secure_filename
 from src import config
@@ -42,14 +41,13 @@ def get_buckets(bucket_name):
         document_types = {}
         get_types = get_types_for_id(client_id)
         for type in get_types:
-            document_types[type['document_type']] = (dict({"document_type": type['document_type']}))
+            document_types[type['document_type']] = (dict({"document_type": type['document_type'].replace('_',' ')}))
             document_types[type['document_type']]['id'] = (dict({"id": type['id']}))
             document_types[type['document_type']]['user_id'] = []
             document_types[type['document_type']]['status'] = {}
             document_types[type['document_type']]['uploaded_doc'] = []
             document_types[type['document_type']]['doc_url'] = []
             document_types[type['document_type']]['notes'] = []
-
 
             status_store = type["status"]
             if not status_store:
