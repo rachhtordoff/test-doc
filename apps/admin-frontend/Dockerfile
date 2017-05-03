@@ -11,6 +11,9 @@ ENV SECRET_KEY you-will-never-guess
 ENV SECURE_API_URL http://secure_api:8000
 
 
+#amazon settings
+
+
 COPY / /opt/
 
 RUN pip3 install -q -r /opt/requirements.txt && \

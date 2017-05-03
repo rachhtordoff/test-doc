@@ -35,12 +35,15 @@ def documents_main():
                 if status['status'] == "Requested":
                     document_types[type['document_type']] =(dict({"document_type": type}))
                     document_types[type['document_type']]['doc_url'] = []
+                    for doc in type['uploaded']:
+                        document_url = get_document(bucket_id,  doc['document_name'])
+                        document_types[type['document_type']]['doc_url'].append(dict({doc['document_name']: document_url}))
                 elif status['status'] == "Uploaded":
                     document_types[type['document_type']] =(dict({"document_type": type}))
                     document_types[type['document_type']]['doc_url'] = []
-        for doc in type['uploaded']:
-            document_url = get_document(bucket_id,  doc['document_name'])
-            document_types[type['document_type']]['doc_url'].append(dict({doc['document_name']: document_url}))
+                    for doc in type['uploaded']:
+                        document_url = get_document(bucket_id,  doc['document_name'])
+                        document_types[type['document_type']]['doc_url'].append(dict({doc['document_name']: document_url}))
         output.append(document_types)
         return render_template('pages/documents.html', pagetitle=pagetitle, user=user, user_account= user_account, document=output, bucket_name=bucket_id)
 

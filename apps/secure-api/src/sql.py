@@ -127,4 +127,4 @@ class Sql:
         Sql.session.commit()
         return Sql.get_user_login({'id':id})
 
-db.session.close()
+Sql.session.close()
