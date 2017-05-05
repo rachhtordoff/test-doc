@@ -87,14 +87,17 @@ def account_setup_page(id):
     if 'user_id' not in session:
         return 'session ended'
     else:
-        pagetitle = "Account Set-up"
-        user_account = get_user_account_with_id(id)
-        account_details = {}
-        account_details['forname'] = user_account['data'][0]['forname']
-        account_details['surname'] = user_account['data'][0]['surname']
-        account_details['gender'] = user_account['data'][0]['gender']
-        account_details['date_of_birth'] = user_account['data'][0]['date_of_birth']
-        return render_template('pages/accountsetup.html', pagetitle=pagetitle, account_details=account_details)
+        if id != str(session['user_id']):
+            return "sorry- you cannot access this page!"
+        else:
+            pagetitle = "Account Set-up"
+            user_account = get_user_account_with_id(id)
+            account_details = {}
+            account_details['forname'] = user_account['data'][0]['forname']
+            account_details['surname'] = user_account['data'][0]['surname']
+            account_details['gender'] = user_account['data'][0]['gender']
+            account_details['date_of_birth'] = user_account['data'][0]['date_of_birth']
+            return render_template('pages/accountsetup.html', pagetitle=pagetitle, account_details=account_details)
 
 @users.route("/account-setup", methods=['POST'])
 def account_setup():

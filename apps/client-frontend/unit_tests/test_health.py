@@ -1,8 +1,6 @@
-from flask import Flask
+#!/usr/bin/env python
 from src.main import app
-import os
-import unittests
-
+import unittest
 
 class TestHealth(unittest.TestCase):
 
