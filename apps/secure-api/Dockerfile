@@ -17,7 +17,7 @@ ENV SQLALCHEMY_HOST 'postgres'
 ENV SQLALCHEMY_PORT '5432'
 ENV SQLALCHEMY_DB 'optiself_user'
 
-#amazon settings
+
 
 COPY / /opt/
 

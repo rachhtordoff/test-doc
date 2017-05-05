@@ -27,7 +27,7 @@ def documents_main():
         for bucket in user_buckets['data']:
             username = get_user_account_with_id(bucket['user_id'])
             bucket_dict.append({'Client_name':username['data'][0]['forname'], 'bucket_name': bucket['bucket_name']})
-        return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=bucket_dict)
+        return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=bucket_dict, user_account=id)
 
 @documents.route("/bucket/<bucket_name>",  methods=['GET'])
 def get_buckets(bucket_name):
@@ -68,7 +68,7 @@ def get_buckets(bucket_name):
             output.append(document_types[type['document_type']])
         documents = get_documents(bucket_id)
         pagetitle= "%s's documents" % bucket_name
-        return render_template('pages/user_documents.html', pagetitle=pagetitle, documents=documents, bucket_name=bucket_id, types=output)
+        return render_template('pages/user_documents.html', pagetitle=pagetitle, documents=documents, bucket_name=bucket_id, types=output, user_account=id)
 
 
 @documents.route("/post-document",  methods=['POST'])
