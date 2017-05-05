@@ -10,21 +10,14 @@ general = Blueprint('general', __name__,
 
 @general.route("/user-home/<id>",  methods=['GET'])
 def user_home_page(id):
-    user_account = get_user_account_with_id(id)
-    username= user_account['data'][0]['forname']
-    pagetitle= "%s's homepage" % username
-    details = get_user_account_with_id(user_account['data'][0]['id'])
-    return render_template('pages/homepage.html', pagetitle=pagetitle, details=details, user_account= user_account)
-
-@general.route("/messages")
-def messages_main():
-    id=session['user_id']
-    user_account = get_user_account_with_id(id)
-    username= user_account['data'][0]['forname']
-    pagetitle= "%s's messages" % username
-    user="sally"
-    return render_template('pages/messages.html', pagetitle=pagetitle,user=user)
-
+    if id != str(session['user_id']):
+        return "sorry- you cannot access this page!"
+    else:
+        user_account = get_user_account_with_id(id)
+        username= user_account['data'][0]['forname']
+        pagetitle= "%s's homepage" % username
+        details = get_user_account_with_id(user_account['data'][0]['id'])
+        return render_template('pages/homepage.html', pagetitle=pagetitle, details=details, user_account= user_account)
 
 @general.route("/logout")
 def logout():
@@ -40,3 +33,12 @@ def check_status():
         "headers": request.headers.to_list(),
         "commit": current_app.config["COMMIT"]
     }),  mimetype='application/json', status=200)
+
+@general.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@general.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('500.html'), 500

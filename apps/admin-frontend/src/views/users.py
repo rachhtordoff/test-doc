@@ -13,10 +13,9 @@ users = Blueprint('users', __name__,
 @users.route("/")
 @users.route("/homepage")
 def homepage():
-    pagetitle="Homepage"
     if 'user_id' in session:
         session.clear()
-    return render_template('pages/index.html', pagetitle=pagetitle)
+    return render_template('pages/index.html')
 
 @users.route("/register", methods=['GET'])
 def register_page():

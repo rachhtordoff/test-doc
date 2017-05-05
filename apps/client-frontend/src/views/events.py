@@ -2,7 +2,6 @@ from flask import request, Blueprint, Response, render_template, flash, redirect
 from flask import current_app
 import json
 import requests
-from ..forms import InitialSetup, AboutMe, FinanceDetails, PropertyDetails
 from .user_controller import get_user_account_with_id
 
 # This is the blueprint object that gets registered into the app in blueprints.py.
