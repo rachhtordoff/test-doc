@@ -23,6 +23,7 @@ def search_documents():
         document_dict['status'] = []
         document_dict['uploaded'] = []
         document_dict['notes'] = []
+        document_dict['notification'] = []
 
         for status in result.documentstatus:
             document_dict['status'].append(status.to_dict())
@@ -33,10 +34,12 @@ def search_documents():
         for note in result.documentnotes:
             document_dict['notes'].append(note.to_dict())
 
+        for notification in result.documentnotification:
+            document_dict['notification'].append(notification.to_dict())
+
 
         result_dict.append(document_dict)
 
-    print(jsonify(result_dict))
     return jsonify(result_dict)
 
 @document_type.route("/document_types/<user_id>", methods=['GET'])
@@ -50,7 +53,7 @@ def search_documents_user_id(user_id):
         document_dict['status'] = []
         document_dict['uploaded'] = []
         document_dict['notes'] = []
-
+        document_dict['notification'] = []
 
         for status in result.documentstatus:
             if status.user_id == id:
@@ -63,6 +66,10 @@ def search_documents_user_id(user_id):
         for note in result.documentnotes:
             if note.user_id == id:
                 document_dict['notes'].append(note.to_dict())
+
+        for notification in result.documentnotification:
+            if notification.user_id == id:
+                document_dict['notification'].append(notification.to_dict())
 
 
         result_dict.append(document_dict)

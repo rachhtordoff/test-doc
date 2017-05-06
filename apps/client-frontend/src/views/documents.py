@@ -34,12 +34,25 @@ def documents_main():
                 if status['status'] == "Requested":
                     document_types[type['document_type']] =(dict({"document_type": type}))
                     document_types[type['document_type']]['doc_url'] = []
+                    document_types[type['document_type']]['notification'] = []
+                    notifications_store = type["notification"]
+                    print(notifications_store)
+                    if not notifications_store:
+                        document_types[type['document_type']]['notification'].append(({"bool" : " "}))
+                    for notification in notifications_store:
+                        document_types[type['document_type']]['notification'].append(dict({"bool" : notification['bool'], "id": notification['id']}))
                     for doc in type['uploaded']:
                         document_url = get_document(bucket_id,  doc['document_name'])
                         document_types[type['document_type']]['doc_url'].append(dict({doc['document_name']: document_url}))
                 elif status['status'] == "Uploaded":
                     document_types[type['document_type']] =(dict({"document_type": type}))
                     document_types[type['document_type']]['doc_url'] = []
+                    document_types[type['document_type']]['notification'] = []
+                    notifications_store = type["notification"]
+                    if not notifications_store:
+                        document_types[type['document_type']]['notification'].append(dict({"bool" : " "}))
+                    for notification in notifications_store:
+                        document_types[type['document_type']]['notification'].append(dict({"bool" : notification['bool'], "id" : notification['id']}))
                     for doc in type['uploaded']:
                         document_url = get_document(bucket_id,  doc['document_name'])
                         document_types[type['document_type']]['doc_url'].append(dict({doc['document_name']: document_url}))
@@ -64,10 +77,22 @@ def documents_upload():
             update_dict['status'] = "Uploaded"
             update_dict['user_id'] = user_id
             update_status(status_id, update_dict)
+            notification_dict = {}
+            notification_dict['document_type_id'] = document_type_id
+            if request.form['notification'] != " ":
+                notification_dict['bool'] = "true"
+                notification_dict['user_id'] = user_id
+                id = request.form['notification_id']
+                update = update_notification(id, notification_dict)
+            else:
+                notification_dict['bool'] = "true"
+                notification_dict['user_id'] = user_id
+                new =  new_notification(notification_dict)
             return redirect('/documents')
         else:"failed to upload"
       else:
         return "not a valid file type"
+
 
 @documents.route("/download-document/<doc_name>",  methods=['GET'])
 def download_document(doc_name):
@@ -87,6 +112,21 @@ def download_document(doc_name):
         whole = wrapper % (doc_name, documents, documents)
         return whole
 
+
+@documents.route("/add-note",  methods=['POST'])
+def add_note():
+    if request.method == 'POST':
+        bucket_name = request.form['bucket_name']
+        user_id =  bucket_name[:-5]
+        note_dict = {}
+        note_dict['document_type_id'] = request.form['type_id']
+        note_dict['note'] = request.form['note']
+        note_dict['user_id'] = user_id
+        note_dict['type'] = "client"
+        update = new_note(note_dict)
+        print(note_dict)
+        return redirect('/documents')
+
 def post_document(userid, file_content, file_name, type_id):
     user_id=str(userid)
     file_store = {file_name: file_content}
@@ -103,6 +143,19 @@ def update_status(id, params):
     data = json.loads(response.text)
     print(data)
     return data
+
+
+def new_note(params):
+    payload = {}
+    payload['data'] = params
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    response = requests.post(config.SECURE_API_URL + '/document_note/', data=json.dumps(payload), headers=headers)
+    data = json.loads(response.text)
+    print("***")
+    print(data)
+    print("**")
+    return data
+
 
 def get_documents(userid):
     user_id=str(userid)
@@ -121,6 +174,28 @@ def get_document(bucket_id, doc_name):
     response = requests.get(config.SECURE_API_URL + '/get_document/' + bucket_id + '/' + doc_name)
     print(response.status_code)
     return response.text
+
+def update_notification(userid, params):
+    user_id=str(userid)
+    payload = {}
+    payload['data'] = params
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    response = requests.put(config.SECURE_API_URL + '/document_notification/'+ user_id, data=json.dumps(payload), headers=headers)
+    data = json.loads(response.text)
+    print(data)
+    return data
+
+def new_notification(params):
+    payload = {}
+    payload['data'] = params
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    response = requests.post(config.SECURE_API_URL + '/document_notification/', data=json.dumps(payload), headers=headers)
+    data = json.loads(response.text)
+    print("***")
+    print(data)
+    print("**")
+    return data
+
 
 def get_bucket(user_id):
     user_id=str(user_id)

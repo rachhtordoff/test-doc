@@ -20,4 +20,9 @@ Vagrant.configure(2) do |config|
   config.vm.provider :virtualbox do |vb|
     vb.customize ['modifyvm', :id, '--memory', ENV['VM_MEMORY'] || 4096]
   end
+
+  #setup database if we have one
+  if File.exists?("uniproject/db_setup.sh")
+    config.vm.provision "shell", path: "uniproject/db_setup.sh"
+  end
 end

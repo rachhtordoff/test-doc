@@ -21,6 +21,7 @@ secure_api:
     - "5100:8000"
   volumes:
     - /vagrant/apps/secure-api:/opt
+    #volumes... google for security issues.
   links:
     - postgres
 

@@ -1,6 +1,6 @@
 from src.app import db
 from sqlalchemy import create_engine
-from src.models import Setup, userdetails, Documentstatus, bucket, uploadedDocument, Documenttype, DocumentNotes
+from src.models import Setup, userdetails, Documentstatus, bucket, uploadedDocument, Documenttype, DocumentNotes, DocumentNotifications
 
 class Sql:
     session = db.create_scoped_session()
@@ -28,6 +28,9 @@ class Sql:
 
     def get_document_status(params):
         return Sql.session.query(Documentstatus).filter_by(**params).all()
+
+    def get_document_notification(params):
+        return Sql.session.query(DocumentNotifications).filter_by(**params).all()
 
     def get_user_with_details_documents(params):
         user = Sql.session.query(userdetails).filter_by(**params).all()
@@ -59,6 +62,12 @@ class Sql:
         Sql.session.add(try_status)
         Sql.session.commit()
         return Sql.get_document_status(try_status.to_dict())
+
+    def new_document_notification(params):
+        try_notification = DocumentNotifications(**params)
+        Sql.session.add(try_notification)
+        Sql.session.commit()
+        return Sql.get_document_notification(try_notification.to_dict())
 
     def new_document_note(params):
         try_note = DocumentNotes(**params)
@@ -118,6 +127,13 @@ class Sql:
             setattr(updating, key, value)
         Sql.session.commit()
         return Sql.get_document_status({'id':id})
+
+    def update_document_notification(id, params):
+        updating = Sql.session.query(DocumentNotifications).get(id)
+        for key, value in params.items():
+            setattr(updating, key, value)
+        Sql.session.commit()
+        return Sql.get_document_notification({'id':id})
 
 
     def update_usersetup(id, params):

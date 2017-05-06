@@ -129,6 +129,7 @@ def add_note():
         note_dict['document_type_id'] = request.form['type_id']
         note_dict['note'] = request.form['note']
         note_dict['user_id'] = user_id
+        note_dict['type'] = "admin"
         update = new_note(note_dict)
         print(note_dict)
     return redirect('/bucket/' + bucket_name)
