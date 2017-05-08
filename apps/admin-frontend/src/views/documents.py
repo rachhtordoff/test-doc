@@ -24,15 +24,18 @@ def documents_main():
         pagetitle= "Client Buckets"
         user_buckets = get_all_user_buckets()
         bucket_dict = []
+        details = {}
         for bucket in user_buckets['data']:
             username = get_user_account_with_id(bucket['user_id'])
-            bucket_dict.append({'Client_name':username['data'][0]['forname'], 'bucket_name': bucket['bucket_name']})
+            details[username['data'][0]['id']]= dict({'Client_name':username['data'][0]['forname'], 'bucket_name': bucket['bucket_name']})
             notification =  get_notifications(bucket['user_id'])
             i = 0
             for no in notification['data']:
                 if no['bool'] == 'true':
                     i = i + 1
-        return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=bucket_dict, user_account=id, notification_no=i)
+                details[username['data'][0]['id']]['notification'] =  dict({'no':i})
+        bucket_dict.append(details)
+        return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=bucket_dict, user_account=id)
 
 @documents.route("/bucket/<bucket_name>",  methods=['GET'])
 def get_buckets(bucket_name):
