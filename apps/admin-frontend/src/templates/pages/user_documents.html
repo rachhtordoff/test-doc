@@ -19,12 +19,13 @@
                     <table class="table table-striped">
                       <thead>
                         <tr>
+                          <th class="col-sm-1">&nbsp;</th>
                           <th  class="col-sm-2">Document Type</th>
                           <th class="col-sm-1">Required?</th>
                           <th class="col-sm-1">Status</th>
-                          <th class="col-sm-2">Download Links</th>
+                          <th class="col-sm-2">Documents</th>
                           <th class="col-sm-2">upload</th>
-                          <th class="col-sm-5">Note</th>
+                          <th class="col-sm-4">Notes</th>
                           <th class="col-sm-1">&nbsp;</th>
 
                           </tr>
@@ -36,10 +37,17 @@
                         <tr>
                           <form method="POST" action="/post-status">
                             <input value="{{bucket_name}}" name="bucket_name" hidden></input>
+                            <td>
+                              {% for notification in doc['notification'] %}
+                                  {% if notification['bool'] == 'true' %}
+                                  <span class="badge"> !</span>
 
+                                  {% endif %}
+                                  {% endfor %}
+</td>
                           <td>
-                          <input  value="{{doc['id']['id']}}" name="documentid" hidden>{{doc['document_type']}}</input>
 
+                          <input  value="{{doc['id']['id']}}" name="documentid" hidden>{{doc['document_type']}}</input>
                         </td>
                         <td>
                             <button class="btn btn-default " type="submit">Request</button>

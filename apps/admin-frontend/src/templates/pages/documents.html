@@ -16,6 +16,7 @@
             <th>&nbsp;</th>
             <th>Client name</th>
             <th>bucket</th>
+              <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>
@@ -24,7 +25,11 @@
             <td></td>
             <td>{{bucket_name['Client_name']}}</td>
             <td><a href="/bucket/{{bucket_name['bucket_name']}}"> {{bucket_name['bucket_name']}} </a></td>
+<td>
 
+      <span class="badge"> {{notification_no}}</span>
+
+</td>
           </tr>
           {% endfor %}
         </tbody>

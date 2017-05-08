@@ -27,7 +27,12 @@ def documents_main():
         for bucket in user_buckets['data']:
             username = get_user_account_with_id(bucket['user_id'])
             bucket_dict.append({'Client_name':username['data'][0]['forname'], 'bucket_name': bucket['bucket_name']})
-        return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=bucket_dict, user_account=id)
+            notification =  get_notifications(bucket['user_id'])
+            i = 0
+            for no in notification['data']:
+                if no['bool'] == 'true':
+                    i = i + 1
+        return render_template('pages/documents.html', pagetitle=pagetitle, user_buckets=bucket_dict, user_account=id, notification_no=i)
 
 @documents.route("/bucket/<bucket_name>",  methods=['GET'])
 def get_buckets(bucket_name):
@@ -41,14 +46,26 @@ def get_buckets(bucket_name):
         document_types = {}
         get_types = get_types_for_id(client_id)
         for type in get_types:
-            document_types[type['document_type']] = (dict({"document_type": type['document_type'].replace('_',' ')}))
+            print(type['id'])
+            document_types[type['document_type']] = dict({"document_type": type['document_type'].replace('_',' ')})
             document_types[type['document_type']]['id'] = (dict({"id": type['id']}))
             document_types[type['document_type']]['user_id'] = []
             document_types[type['document_type']]['status'] = {}
             document_types[type['document_type']]['uploaded_doc'] = []
             document_types[type['document_type']]['doc_url'] = []
             document_types[type['document_type']]['notes'] = []
+            document_types[type['document_type']]['notification'] = []
 
+            notification_store = type['notification']
+            for notification in notification_store:
+                if notification['user_id'] == int(client_id):
+                    document_types[type['document_type']]['notification'].append(dict({"bool" : notification['bool'], "id" : notification['id']}))
+                    notification_dict = {}
+                    notification_dict['document_type_id'] = type['id']
+                    notification_dict['bool'] = "false"
+                    notification_dict['user_id'] = notification['user_id']
+                    id = notification['id']
+                    update = update_notification(id, notification_dict)
             status_store = type["status"]
             if not status_store:
                 document_types[type['document_type']]['status'] = dict({"status" : " "})
@@ -177,6 +194,24 @@ def get_status(userid):
     data = json.loads(response.text)
     print(data)
     return data
+
+def get_notifications(userid):
+    user_id=str(userid)
+    response = requests.get(config.SECURE_API_URL + '/document_notification/'+ user_id)
+    data = json.loads(response.text)
+    print(data)
+    return data
+
+def update_notification(userid, params):
+    user_id=str(userid)
+    payload = {}
+    payload['data'] = params
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    response = requests.put(config.SECURE_API_URL + '/document_notification/'+ user_id, data=json.dumps(payload), headers=headers)
+    data = json.loads(response.text)
+    print(data)
+    return data
+
 
 def update_status(userid, params):
     user_id=str(userid)
