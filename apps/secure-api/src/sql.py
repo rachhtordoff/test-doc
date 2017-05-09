@@ -4,6 +4,7 @@ from src.models import Setup, userdetails, Documentstatus, bucket, uploadedDocum
 
 class Sql:
     session = db.create_scoped_session()
+
 #start of search sql statements
     def get_user_login(params):
         return Sql.session.query(Setup).filter_by(**params).all()
@@ -143,4 +144,4 @@ class Sql:
         Sql.session.commit()
         return Sql.get_user_login({'id':id})
 
-Sql.session.close()
+db.engine.dispose()

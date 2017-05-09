@@ -28,9 +28,11 @@
             <td>{{bucket_name[i]['Client_name']}}</td>
             <td><a href="/bucket/{{bucket_name[i]['bucket_name']}}"> {{bucket_name[i]['bucket_name']}} </a></td>
 <td>
-
-      <span class="badge"> {{bucket_name[i]['notification']['no']}}</span>
-
+ {% if bucket_name[i]['notification']['no'] == 0 %}
+ <span class="label label-default">{{bucket_name[i]['notification']['no']}}</span>
+{% else %}
+<span class="label label-danger"> {{bucket_name[i]['notification']['no']}}</span>
+    {% endif %}
 </td>
           </tr>
           {% endfor %}

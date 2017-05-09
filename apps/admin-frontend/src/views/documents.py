@@ -29,7 +29,10 @@ def documents_main():
             username = get_user_account_with_id(bucket['user_id'])
             details[username['data'][0]['id']]= dict({'Client_name':username['data'][0]['forname'], 'bucket_name': bucket['bucket_name']})
             notification =  get_notifications(bucket['user_id'])
+            print(notification)
             i = 0
+            if not notification['data']:
+                details[username['data'][0]['id']]['notification'] =  dict({'no': 0})
             for no in notification['data']:
                 if no['bool'] == 'true':
                     i = i + 1
